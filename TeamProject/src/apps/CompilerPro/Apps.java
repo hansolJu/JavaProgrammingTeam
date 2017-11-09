@@ -1,5 +1,7 @@
 package apps.CompilerPro;
 
-public class Apps {
+import javax.swing.JPanel;
+
+public class Apps extends JPanel {
 
 }
