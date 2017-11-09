@@ -1,85 +1,74 @@
-import java.util.Scanner;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-public class Main {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class Main extends JFrame{
+	JTextField fileOpenText;
+	JTextField fileSaveText;
+	JTextArea fileEditArea, resultArea;
+	JButton openButton, saveButton;
+	JButton compileButton, runButton, saveErrorsButton, deleteButton, clearButton;
+	Container contentPane;
+	Main(){
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("JAVA IDE"	);
+		contentPane = this.getContentPane();
+		contentPane.setLayout(new GridLayout(5,1));
+		
+		OpenPanel openPanel = new OpenPanel();
+		SavePanel savePanel = new SavePanel();
+		contentPane.add(openPanel);
+		contentPane.add(savePanel);
+		fileSaveText = new JTextField(50);
+		fileEditArea = new JTextArea(50, 50);
+		
+		setSize(300, 500);
+		setVisible(true);
+		
+	}
+	/*
 	Scanner scanner = new Scanner(System.in);
 	private boolean isCompiled = false;
 	FileSys fileSys = new FileSys(); 
 	Runner runner = new Runner();
 	Compiler compiler = new Compiler();
 	Error error = new Error();
-	
-	//선택지를 알려주는 함수
-	private void view() {
-		liner();
-		System.out.println("1. Java File Upload");
-		System.out.println("2. Complie");
-		System.out.println("3. Run");
-		System.out.println("4. Reset");
-		System.out.println("5. Complie Error File");
-		System.out.print("Choice: ");
-	}
-	//입력이 끝나고 뷰를 꾸며주는 함수
-	private void liner(){
-		System.out.println("############################");
-	}
-	
-	private void select() {
-		while (true) {
-			switch (scanner.nextInt()) {
-			case 1:
-				oneCase();
-				break;
-			case 2:
-				twoCase();
-				break;
-			case 3:
-				threeCase();
-				break;
-			case 4:
-				fourCase();
-				break;
-			case 5:
-				fiveCase();
-				break;
-			default:
-				break;
-			}
+	*/
+	private class OpenPanel extends JPanel{
+		OpenPanel() {
+			setLayout(new FlowLayout());
+			fileOpenText = new JTextField(50);
+			openButton = new JButton("Open");
+			add(fileOpenText);
+			add(openButton);
+			
 		}
 	}
-
-	private void oneCase() {
-		liner();
-		fileSys.inputFile(); 
-		fileSys.checkFile();
-		view();
+	private class SavePanel extends JPanel{
+		SavePanel() {
+			setLayout(new FlowLayout());
+			fileSaveText = new JTextField(50);
+			saveButton = new JButton("Save");
+			add(fileSaveText);
+			add(saveButton);
+		}
 	}
-	private void twoCase() {
-		liner();
-		compiler.setFile(fileSys.FileDirSeperator(fileSys.getPath()));
-		isCompiled = compiler.compiler();
-		view();
+	private class EditPanel extends JPanel {
+		
 	}
-	private void threeCase() {
-		liner();
-		runner.setFile(fileSys.FileDirSeperator(fileSys.getPath()));
-		runner.run(isCompiled);
-		view();
+	private class ButtonsPanel extends JPanel {
+		
 	}
-	private void fourCase() {
-		liner();
-		isCompiled = fileSys.deleteFile();
-		view();
+	private class resultPanel extends JPanel {
+		
 	}
-	private void fiveCase() {
-		liner();
-		error.setFile(fileSys.FileDirSeperator(fileSys.getPath()));
-		error.errorPrint(isCompiled);
-		view();
-	}
-	
 	public static void main(String[] args) {
-		Main main = new Main();
-		main.view();
-		main.select();
+		new Main();
 	}
 }
