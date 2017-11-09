@@ -1,8 +1,9 @@
 package hardcoding;
 
+import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
@@ -61,11 +62,13 @@ public class Test {
 		panel.add(panel_1);
 		
 		textField = new JTextField();
+		textField.setBackground(Color.LIGHT_GRAY);
 		textField.setColumns(10);
 		
 		JButton btnOpen = new JButton("open");
-		btnOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnOpen.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
@@ -94,11 +97,13 @@ public class Test {
 		panel.add(panel_2);
 		
 		textField_1 = new JTextField();
+		textField_1.setBackground(Color.LIGHT_GRAY);
 		textField_1.setColumns(10);
 		
 		JButton button = new JButton("save");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -127,6 +132,7 @@ public class Test {
 		panel.add(panel_3);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setBackground(Color.LIGHT_GRAY);
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -147,38 +153,40 @@ public class Test {
 		panel_4.setBounds(12, 394, 460, 41);
 		panel.add(panel_4);
 		
-		JButton btnNewButton_1 = new JButton("Compile");
-		btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+		JButton button_0 = new JButton("Compile");
+		button_0.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		
 		JButton button_1 = new JButton("Save Errors");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		
 		JButton button_2 = new JButton("Delete");
-		button_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		button_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		JButton button_3 = new JButton("Clear");
+		button_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 			}
 		});
 		
-		JButton button_3 = new JButton("Clear");
-		button_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(btnNewButton_1)
-					.addGap(18)
-					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addComponent(button_0, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(button_2, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(button_3, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
@@ -189,7 +197,7 @@ public class Test {
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton_1)
+						.addComponent(button_0)
 						.addComponent(button_1)
 						.addComponent(button_2)
 						.addComponent(button_3))
@@ -202,6 +210,7 @@ public class Test {
 		panel.add(panel_5);
 		
 		JTextArea textArea_1 = new JTextArea();
+		textArea_1.setBackground(Color.LIGHT_GRAY);
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
