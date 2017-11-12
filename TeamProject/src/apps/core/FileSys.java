@@ -1,3 +1,5 @@
+package apps.core;
+
 import java.io.File;
 import java.util.Scanner;
 
