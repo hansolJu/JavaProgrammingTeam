@@ -1,10 +1,25 @@
+/**
+ * 파일의 정보가 들어간 model 클래스
+ * 싱글턴 패턴으로 작성
+ * 
+ * 작성일 : 17.11.16
+ * 수정일 : 17.11.16
+ * 작성자 : 정은진
+ * 
+ */
 package apps.model;
 
 public class Model {
+	private static Model instance = new Model();
 	private String filePath;
 	private String fileName;
 	private String fileDir;
 	
+	private Model() {
+	}
+	public static Model getInstance() {
+		return instance;
+	}
 	public String getFilePath() {
 		return filePath;
 	}
