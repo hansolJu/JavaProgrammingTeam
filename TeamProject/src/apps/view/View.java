@@ -1,3 +1,10 @@
+/**
+ * 어플 뷰단 완성
+ * 작성자: 주한솔
+ * 수정자: 
+ * 최종수정일: 17.11.16
+ * 
+ */
 package apps.view;
 
 import java.awt.BorderLayout;
