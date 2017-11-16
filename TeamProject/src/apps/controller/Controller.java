@@ -1,3 +1,9 @@
+/**
+ * 컨트롤러 작성
+ * 작성일 : 17.11.16
+ * @author 정은진
+ * 
+ */
 package apps.controller;
 
 import java.awt.event.ActionEvent;
