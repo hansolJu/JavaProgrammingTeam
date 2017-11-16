@@ -12,6 +12,7 @@ public class Model {
 	private String filePath;
 	private String fileName;
 	private String fileDir;
+	private boolean isCompiled =false;
 	
 	private Model() {
 	}
@@ -20,6 +21,12 @@ public class Model {
 	}
 	public String getFilePath() {
 		return filePath;
+	}
+	public boolean getIsCompiled() {
+		return isCompiled;
+	}
+	public void setIsCompiled(boolean isCompiled) {
+		this.isCompiled = isCompiled;
 	}
 	public String getFileDir() {
 		return fileDir;
