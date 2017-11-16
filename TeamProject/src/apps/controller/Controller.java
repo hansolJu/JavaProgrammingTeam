@@ -1,6 +1,7 @@
 /**
  * 컨트롤러 작성
  * 작성일 : 17.11.16
+ * 수정일 : 17.11.16
  * @author 정은진
  * 
  */
@@ -16,8 +17,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import apps.core.*;
 import apps.core.Compiler;
+import apps.core.Runner;
 import apps.model.Model;
 import apps.view.View;
 
@@ -25,11 +26,13 @@ public class Controller {
 	private Model model;
 	private View view;
 	private Compiler compiler;
+	private Runner runner;
 
 	public Controller(Model model, View view) {
 		this.model = model;
 		this.view = view;
 		this.compiler = new Compiler();
+		this.runner = new Runner();
 	}
 	private void initView() {
 	}
@@ -37,6 +40,7 @@ public class Controller {
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
 		view.getCompileButton().addActionListener(new compileActionListener());
+		view.getRunnerButton().addActionListener(new runActionListener())
 		view.getSaveErrorButton().addActionListener(new saveErrorsActionListener());
 		view.getDeleteButton().addActionListener(new deleteJavaFileActionListener());
 		view.getClearButton().addActionListener(new clearActionListener());
@@ -60,9 +64,30 @@ public class Controller {
 	private class saveJavaFileActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			view.getResultWindowArea().setText("");
+			try {
+				if(saveJavaFile(view.getOpenFilePath().getText(), view.getSaveFilePath().getText())) {
+					if(view.getSaveFilePath().getText().equals(""))
+						view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
+					else
+						view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
+				}
+				else
+					view.getResultWindowArea().setText("저장할 파일명을 입력해주세요");
+			}catch(IOException ie) {
+				view.getResultWindowArea().setText(ie.getMessage());
+			}
 		}
-
+	}
+	private class  runActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			view.getResultWindowArea().setText("");
+			ArrayList<String> list;
+			list = runner.run(model.getIsCompiled);
+			for(String line : list)
+				view.getResultWindowArea().setText(view.getResultWindowArea().getText() + line + "\n");
+		}
 	}
 	private class compileActionListener implements ActionListener{
 		@Override
@@ -70,15 +95,18 @@ public class Controller {
 			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
 			//지훈이가 해줭 compiler.setFile(fullFilePath);
-			
+
 		}
 	}
 	private class saveErrorsActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//지훈이가
+			try {
+				saveJavaFile(view.getOpenButton().getText(), view.getSaveButton().getText());
+			} catch (IOException ie) {
+				System.out.println(ie.getMessage());
+			}
 		}
-
 	}
 	private class deleteJavaFileActionListener implements ActionListener{
 		@Override
@@ -99,7 +127,7 @@ public class Controller {
 			view.getResultWindowArea().setText("");
 		}
 	}
-	
+
 	//fileSys
 	public boolean inputFile(String filePath) {
 		//if file exist
@@ -124,7 +152,7 @@ public class Controller {
 		else 
 			return false;
 	}
-	
+
 	public boolean deleteFile() {
 		File file = new File(model.getFilePath());
 		if(file.delete()) {
@@ -159,26 +187,26 @@ public class Controller {
 				fullFilePath[0] = filePath.toString();
 			}
 			else {
-			filePath.append(fileDirArray[i]);
-			filePath.append("\\\\");
+				filePath.append(fileDirArray[i]);
+				filePath.append("\\\\");
 			}
 		}
 		return fullFilePath;
 	}
-	public boolean saveJavaFile(String openFileName, String saveFileName) throws IOException {
-		if(saveFileName.equals("")) {
-			saveFile(openFileName, readFile(openFileName));
+	public boolean saveJavaFile(String openFilePath, String saveFilePath) throws IOException {
+		if(saveFilePath.equals("")) {
+			saveFile(openFilePath, readFile(openFilePath));
 			return true;
 		}
-		if(openFileName == saveFileName && !saveFileName.equals(""))
+		if(openFilePath == saveFilePath)
 			return false;
 		else {	
-			saveFile(saveFileName, readFile(openFileName));
+			saveFile(saveFilePath, readFile(openFilePath));
 			return true;
 		}
 	}
-	public void saveFile(String saveFileName, ArrayList<String> list) throws IOException {
-		File file = new File(saveFileName);
+	public void saveFile(String saveFilePath, ArrayList<String> list) throws IOException {
+		File file = new File(saveFilePath);
 		BufferedWriter fw = new BufferedWriter(new FileWriter(file, false));
 		for(String line : list)
 			fw.write(line);
