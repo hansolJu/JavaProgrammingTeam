@@ -16,7 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Test {
-
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
