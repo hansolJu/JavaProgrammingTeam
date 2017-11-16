@@ -13,44 +13,42 @@ import java.util.ArrayList;
 import apps.core.*;
 import apps.core.Compiler;
 import apps.model.Model;
+import apps.view.View;
 
 public class Controller {
 	private Model model;
 	private View view;
-	private FileSys fileSys;
 	private Compiler compiler;
 
 	public Controller(Model model, View view) {
 		this.model = model;
 		this.view = view;
-		this.fileSys = new FileSys();
 		this.compiler = new Compiler();
 	}
 	private void initView() {
-		view
 	}
 	private void initController() {
-		view.getOpenButton.addActionListener(new openJavaFileActionListener());
-		view.getSaveButton.addActionListener(new saveJavaFileActionListener());
-		view.getCompileButton.addActionListener(new compileActionListener());
-		view.getSaveErrorsButton.addActionListener(new saveErrorsActionListener());
-		view.getDeleteButton.addActionListener(new deleteJavaFileActionListener());
-		view.getClearButton.addActionListener(new clearActionListener());
+		view.getOpenButton().addActionListener(new openJavaFileActionListener());
+		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
+		view.getCompileButton().addActionListener(new compileActionListener());
+		view.getSaveErrorButton().addActionListener(new saveErrorsActionListener());
+		view.getDeleteButton().addActionListener(new deleteJavaFileActionListener());
+		view.getClearButton().addActionListener(new clearActionListener());
 	}
 	private class openJavaFileActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			view.getResultArea.setText("");
-			view.getEditArea.setText("");
+			view.getResultWindowArea().setText("");
+			view.getEditingWindowArea().setText("");
 			ArrayList<String> lines;
-			String filePath = view.getOpenTextField().getText();
-			if (fileSys.inputFile(filePath)) {
+			String filePath = view.getOpenFilePath().getText();
+			if (inputFile(filePath)) {
 				lines = readFile(filePath);
 				for(String line : lines)
-					view.getEditArea().setText(view.getEditArea().getText() + line + "\n");
+					view.getEditingWindowArea().setText(view.getEditingWindowArea().getText() + line + "\n");
 			}
 			else
-				view.getResultArea.setText("파일을 찾을 수 없습니다...");
+				view.getResultWindowArea().setText("파일을 찾을 수 없습니다...");
 		}
 	}
 	private class saveJavaFileActionListener implements ActionListener {
@@ -63,7 +61,7 @@ public class Controller {
 	private class compileActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			view.getResultArea.setText("");
+			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
 			//지훈이가 해줭 compiler.setFile(fullFilePath);
 			
@@ -80,19 +78,19 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(deleteFile()) 
-				view.getResultArea.setText("Delete Success!!");
+				view.getResultWindowArea().setText("Delete Success!!");
 			else
-				view.getResultArea.setText("Delete Fail!!");
+				view.getResultWindowArea().setText("Delete Fail!!");
 		}
 
 	}
 	private class clearActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			view.getFileOpenField().setText("");
-			view.getFileSaveField().setText("");
-			view.getEditArea().setText("");
-			view.getResultArea().setText("");
+			view.getOpenFilePath().setText("");
+			view.getSaveFilePath().setText("");
+			view.getEditingWindowArea().setText("");
+			view.getResultWindowArea().setText("");
 		}
 	}
 	
@@ -195,6 +193,4 @@ public class Controller {
 		}
 		return lines;
 	}
-}
-
 }
