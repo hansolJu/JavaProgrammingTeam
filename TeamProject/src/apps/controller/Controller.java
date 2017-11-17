@@ -36,6 +36,7 @@ public class Controller {
 	}
 	private void initView() {
 	}
+
 	private void initController() {  //각 컴포넌트에 리스너 추가
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
@@ -93,6 +94,7 @@ public class Controller {
 	private class compileActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
 			compiler.setFile(model.getFilePath(), model.getFileName());
 			lines = compiler.compiler();

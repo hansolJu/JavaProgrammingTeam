@@ -9,6 +9,7 @@ public class App {
 		Model m = Model.getInstance();
 		View v = new View("IDE");
 		Controller c = new Controller(m,v);
+		c.initController();
 		
 	}
 
