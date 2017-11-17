@@ -1,65 +1,62 @@
+/**
+ * .class파일을 실행시켜주는 클래스
+ * 수정일 : 17.11.16
+ * @author isk03
+ * 
+ */
 package apps.core;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-/**
- * 
- * fileName : �뙆�씪�쓽 �씠由�
- * filePath : �뙆�씪�쓽 �젅�� 寃쎈줈
- * @author isk03
- * �뙆�씪�쓽 �씠由꾩쓣 諛쏆븘 �떎�뻾�븯�뒗 �겢�옒�뒪
- */
+import java.util.ArrayList;
+
+import apps.model.Model;
+
 public class Runner {
-	private String fileName;
-	private String filePath;
+	private Model model = Model.getInstance();
+	private ArrayList<String> resultList;
 	/**
 	 * 
-	 * �빐�떦 �뙆�씪�쓣 �떎�뻾(run)
+	 * 해당 파일을 실행(run)
 	 */
-	public synchronized void run(boolean isCompiled) {
-		if(!checkCompiled(isCompiled))  //�옒 而댄뙆�씪 �릱�뒗吏� 寃��궗
-			return;
+	public ArrayList<String> run(boolean isCompiled) {
+		resultList = new ArrayList<String>();
+		if(!checkCompiled(isCompiled))  //잘 컴파일 됐는지 검사
+			return resultList;
 		try {
 			String outLine, errLine;
 			
-			Process oProcess = new ProcessBuilder("java", "-cp", filePath, fileName.split(".java")[0]).start();  //cmd 紐낅졊�뼱 ex)java -cp C:\temp\ test
+			Process oProcess = new ProcessBuilder("java", "-cp", model.getFileDir(), model.getFileName().split(".java")[0]).start();  //cmd 명령어 ex)java -cp C:\temp\ test
 			
 			BufferedReader resultOut = new BufferedReader(new InputStreamReader(oProcess.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(oProcess.getErrorStream()));
 			
-			while ((errLine = stdError.readLine()) != null) System.err.println(errLine);
-			while((outLine = resultOut.readLine()) != null)	System.out.println(outLine);
+			while ((errLine = stdError.readLine()) != null) resultList.add(errLine);
+			while((outLine = resultOut.readLine()) != null)	resultList.add(outLine);
 		}
 		catch(IOException e) {
-			System.err.println("�옄諛� �뙆�씪�쓣 �떎�뻾�븯吏� 紐삵뻽�뒿�땲�떎.\n" + e.getMessage());
+			resultList.add("자바 파일을 실행하지 못했습니다.\n" + e.getMessage());
 		}
+		return resultList;
 	}
 	/**
 	 * 
-	 * @param FileDirArray index0:寃쎈줈, index1:�씠由�(~~~.java)
-	 * �뙆�씪�씠由꾧낵 寃쎈줈瑜� �꽕�젙
-	 */
-	public void setFile(String[] FileDirArray) {
-		filePath = FileDirArray[0];
-		fileName = FileDirArray[1];
-	}
-	/**
-	 * 
-	 * @param isCompiled:而댄뙆�씪 �삤瑜섍� 諛쒖깮�븳 寃쎌슦 �삤瑜섏쿂由щ�� �쐞�븳 蹂��닔
-	 * @return �뙆�씪�씠 �옒 而댄뙆�씪�릱�뿀�떎硫� true
-	 * �뙆�씪�씠 �옒 而댄뙆�씪�릱�뒗吏� �솗�씤 
+	 * @param isCompiled:컴파일 오류가 발생한 경우 오류처리를 위한 변수
+	 * @return 파일이 잘 컴파일됐었다면 true
+	 * 파일이 잘 컴파일됐는지 확인 
 	 */
 	private boolean checkCompiled(boolean isCompiled) {
-		if(!isCompiled) {  //而댄뙆�씪 �삤瑜섍� 諛쒖깮�븳 �긽�깭�뿉�꽌 run 硫붾돱 諛쒖깮 �떆, boolean媛� 諛섑솚
-			System.out.println("");
-			System.err.println("而댄뙆�씪 �삤瑜�");
+		if(!isCompiled) {  //컴파일 오류가 발생한 상태에서 run 메뉴 발생 시, boolean값 반환
+			resultList.add(""+"컴파일 오류");
 			return false;
 		}
-		File file = new File(filePath, fileName);
+		if (model.getFileName().split(".java")[model.getFileName().split(".java").length -1].equals(".java")) //파일 이름이 .java 확장자가 아니라면
+			return false;
+		File file = new File(model.getFilePath());
 		if(!file.exists()) {
-			System.err.println("\t�뙆�씪�씠 議댁옱�븯吏� �븡�뒿�땲�떎..");
+			resultList.add("\t파일이 존재하지 않습니다..");
 			return false;
 		}
 		return true;
