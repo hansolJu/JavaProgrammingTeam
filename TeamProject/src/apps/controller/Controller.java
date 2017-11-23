@@ -2,7 +2,7 @@
  * 컨트롤러 작성
  * 작성일 : 17.11.16
  * 수정일 : 17.11.23
- * 수정 내용 : run버튼에 이벤트 추가
+ * 수정 내용 : 예외 상황 처리
  * @author 정은진
  * 
  */
@@ -215,11 +215,17 @@ public class Controller {
 		String [] lines = view.getEditingWindowArea().getText().split("\n");
 		ArrayList<String> list= new ArrayList<>(Arrays.asList(lines));  //배열 -> 리스트
 		if(saveFilePath.equals("")) {  //저장 경로에 아무 텍스트가 없을 때
+			if(openFilePath.equals("")) {
+				view.getResultWindowArea().setText("지정한 파일이 없습니다.");
+				return;
+			}
 			saveFile(openFilePath, list);
 			view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
 		}
-		if(openFilePath.equals(saveFilePath))  //오픈 경로와 세이브 경로가 같을 때
-			view.getResultWindowArea().setText("중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
+		if(openFilePath.equals(saveFilePath)) { //오픈 경로와 세이브 경로가 같을 때
+			view.getResultWindowArea().setText("열린 파일과 중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
+			return;
+		}
 		else {	
 			saveFile(saveFilePath, list);
 			view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
