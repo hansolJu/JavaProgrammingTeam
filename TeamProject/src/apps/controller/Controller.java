@@ -38,7 +38,7 @@ public class Controller {
 	private void initView() {
 	}
 
-	private void initController() {  //각 컴포넌트에 리스너 추가
+	public void initController() {  //각 컴포넌트에 리스너 추가
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
 		view.getCompileButton().addActionListener(new compileActionListener());
@@ -114,7 +114,7 @@ public class Controller {
 						return;
 					else {
 						ArrayList<String> lines = new ArrayList<String>(); 
-						String[] result = view.getResultWindowArea().getText().split("\r\n");
+						String[] result = view.getResultWindowArea().getText().split("\n");
 						for(String line : result)
 							lines.add(line);
 						saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);
