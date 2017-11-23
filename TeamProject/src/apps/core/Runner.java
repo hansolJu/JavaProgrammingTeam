@@ -1,7 +1,7 @@
 /**
  * .class파일을 실행시켜주는 클래스
  * 수정일 : 17.11.16
- * @author isk03
+ * @author 정은진
  * 
  */
 package apps.core;

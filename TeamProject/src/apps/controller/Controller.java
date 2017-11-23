@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import apps.core.Compiler;
 import apps.core.Runner;
@@ -35,9 +36,6 @@ public class Controller {
 		this.compiler = new Compiler();
 		this.runner = new Runner();
 	}
-	private void initView() {
-	}
-
 	public void initController() {  //각 컴포넌트에 리스너 추가
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
@@ -68,14 +66,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			view.getResultWindowArea().setText("");
 			try {
-				if(saveJavaFile(view.getOpenFilePath().getText(), view.getSaveFilePath().getText())) {
-					if(view.getSaveFilePath().getText().equals(""))
-						view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
-					else
-						view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
-				}
-				else
-					view.getResultWindowArea().setText("저장할 파일명을 입력해주세요");
+				saveJavaFile(view.getOpenFilePath().getText(), view.getSaveFilePath().getText());
 			}catch(IOException ie) {
 				view.getResultWindowArea().setText(ie.getMessage());
 			}
@@ -220,23 +211,25 @@ public class Controller {
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean saveJavaFile(String openFilePath, String saveFilePath) throws IOException {
-		if(saveFilePath.equals("")) {
-			saveFile(openFilePath, readFile(openFilePath));
-			return true;
+	public void saveJavaFile(String openFilePath, String saveFilePath) throws IOException {
+		String [] lines = view.getEditingWindowArea().getText().split("\n");
+		ArrayList<String> list= new ArrayList<>(Arrays.asList(lines));  //배열 -> 리스트
+		if(saveFilePath.equals("")) {  //저장 경로에 아무 텍스트가 없을 때
+			saveFile(openFilePath, list);
+			view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
 		}
-		if(openFilePath == saveFilePath)
-			return false;
+		if(openFilePath.equals(saveFilePath))  //오픈 경로와 세이브 경로가 같을 때
+			view.getResultWindowArea().setText("중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
 		else {	
-			saveFile(saveFilePath, readFile(openFilePath));
-			return true;
+			saveFile(saveFilePath, list);
+			view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
 		}
 	}
 	public void saveFile(String saveFilePath, ArrayList<String> list) throws IOException {  //saveFilePath에 list를 파일 출력
 		File file = new File(saveFilePath);
 		BufferedWriter fw = new BufferedWriter(new FileWriter(file, false));
-		for(String line : list)
-			fw.write(line);
+		for(String line : list) 
+			fw.write(line + "\n");
 		fw.close();
 	}
 	public ArrayList<String> readFile(String filePath) {  //해당 파일을 불러와서 list로 반환
