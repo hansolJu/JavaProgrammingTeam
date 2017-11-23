@@ -24,7 +24,7 @@ public class Compiler {
 	public ArrayList<String> compiler(){
 		Model model = Model.getInstance();
 		String errLine = null;
-		File file = new File(fileName);       //EX)c:\filePath\fileName
+		File file = new File(filePath, fileName);       //EX)c:\filePath\fileName
 		if(!file.exists()){
 			lines.add("파일이 없습니다.");
 			model.setIsCompiled(false);

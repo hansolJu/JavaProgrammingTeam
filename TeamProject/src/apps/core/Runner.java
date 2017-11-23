@@ -27,7 +27,6 @@ public class Runner {
 			return resultList;
 		try {
 			String outLine, errLine;
-			
 			Process oProcess = new ProcessBuilder("java", "-cp", model.getFileDir(), model.getFileName().split(".java")[0]).start();  //cmd 명령어 ex)java -cp C:\temp\ test
 			
 			BufferedReader resultOut = new BufferedReader(new InputStreamReader(oProcess.getInputStream()));

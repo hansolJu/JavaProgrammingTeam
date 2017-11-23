@@ -151,8 +151,7 @@ public class Controller {
 			return false;
 	}
 	private void setFile() {  //파일 정보를 model클래스에 저장
-		String [] fileInfoArray = FileDirSeperator(model.getFilePath());
-		System.out.println(fileInfoArray[0] +  fileInfoArray[1]); //test
+		String [] fileInfoArray = FileDirSeperator();
 		model.setFileDir(fileInfoArray[0]);
 		model.setFileName(fileInfoArray[1]);
 	}
@@ -185,26 +184,24 @@ public class Controller {
 	 * @param compiledFileName
 	 * 파일명과 디렉터리명을 분리하여 필드 변수에 저장
 	 */
-	private String[] FileDirSeperator(String absolutePath) {
-		String [] fileDirArray;
-		if(!checkFile(absolutePath)) {
-			fileDirArray = new String[2];
-			return fileDirArray;
+	private String[] FileDirSeperator() {
+		String [] fileArray = new String[2];
+		if(!checkFile(model.getFilePath())) {
+			return fileArray;
 		}
-		fileDirArray = model.getFilePath().split("////");
-		StringBuilder filePath = new StringBuilder();
-		String [] fullFilePath = new String[2];
-		for(int i=0; i<fileDirArray.length; i++) {
-			if(i == fileDirArray.length -1) {  //필드 변수에 값들을 저장하고 return
-				fullFilePath[1] = fileDirArray[i];
-				fullFilePath[0] = filePath.toString();
+		String [] splittedArray = model.getFilePath().split("\\\\");
+		StringBuilder dirPath = new StringBuilder();
+		for(int i=0; i<splittedArray.length; i++) {
+			if(i == splittedArray.length -1) {
+				fileArray[1] = splittedArray[i];
+				fileArray[0] = dirPath.toString();
 			}
 			else {
-				filePath.append(fileDirArray[i]);
-				filePath.append("\\\\");
+				dirPath.append(splittedArray[i]);
+				dirPath.append("\\\\");
 			}
 		}
-		return fullFilePath;
+		return fileArray;
 	}
 	/**
 	 * 
