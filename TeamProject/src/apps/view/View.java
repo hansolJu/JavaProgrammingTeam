@@ -1,22 +1,20 @@
 /**
  * 어플 뷰단 완성
  * 작성자: 주한솔
- * 수정자: 
- * 최종수정일: 17.11.16
+ * 수정자: 주한솔
+ * 수정내용: 레이아웃변경 (17.11.23)
+ * 최종수정일: 17.11.23
  * 
  */
 package apps.view;
 
-import java.awt.BorderLayout;
-
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JScrollBar;
 
 public class View {
 	private JFrame frame;
@@ -39,38 +37,105 @@ public class View {
 	public View(String title) {
 		//Create the principal frame
 		frame  = new JFrame(title);
-		frame.getContentPane().setLayout(new BorderLayout());
-		frame.setBounds(100, 100, 500, 782);
+		frame.getContentPane().setLayout(null);
+		frame.setBounds(100, 100, 493, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);//프레임 중앙에 배치.
+		frame.setResizable(false);
 		frame.setVisible(true);
 		
 		//Create UI elements
+		
 		openFilePath = new JTextField();
+		openFilePath.setBounds(2, 2, 370, 35);
 		openFilePath.setColumns(10);
 		saveFilePath = new JTextField();
+		saveFilePath.setBounds(2,2,370, 35);
 		saveFilePath.setColumns(10);
 		
 		openButton = new JButton("Open");
+		openButton.setSize(90, 35);
+		openButton.setLocation(378, 2);
 		saveButton = new JButton("Save");
+		saveButton.setSize(90, 35);
+		saveButton.setLocation(378, 2);
 		compileButton = new JButton("Compile");
+		compileButton.setSize(90, 35);
+		compileButton.setLocation(0, 2);
 		runButton = new JButton("Run");
+		runButton.setSize(90, 35);
+		runButton.setLocation(95, 2);
 		saveErrorButton = new JButton("SaveError");
+		saveErrorButton.setSize(100, 35);
+		saveErrorButton.setLocation(190, 2);
 		deleteButton = new JButton("Delete");
+		deleteButton.setSize(90, 35);
+		deleteButton.setLocation(295, 2);
 		clearButton = new JButton("Clear");
+		clearButton.setSize(90, 35);
+		clearButton.setLocation(390, 2);
 		
 		editingWindowArea = new JTextArea();
+		JScrollPane editScrollPane = new JScrollPane(editingWindowArea);
+		editScrollPane.setBounds(2, 2, 476, 315);
+		editingWindowArea.setCaretPosition(editingWindowArea.getDocument().getLength());
 		resultWindowArea = new JTextArea();
+		JScrollPane resultScrollPane = new JScrollPane(resultWindowArea);
+		resultScrollPane.setBounds(2, 2, 476, 316);
+		resultWindowArea.setCaretPosition(resultWindowArea.getDocument().getLength());
 		
 		//Add UI element to frame
+		JPanel open = new JPanel();
+		open.setSize(480, 40);
+		open.setLocation(2, 0);
+		JPanel save = new JPanel();
+		save.setSize(480, 40);
+		save.setLocation(2, 40);
+		JPanel openAndSave = new JPanel();
+		openAndSave.setSize(480, 80);
+		JPanel edit = new JPanel();
+		edit.setSize(480, 320);
+		edit.setLocation(2, 80);
+		JPanel buttonSet = new JPanel();
+		buttonSet.setSize(480, 40);
+		buttonSet.setLocation(2, 400);
+		JPanel result = new JPanel();
+		result.setSize(480, 320);
+		result.setLocation(2, 440);
+		
+		frame.getContentPane().add(openAndSave);
+		openAndSave.setLayout(null);
+			openAndSave.add(open);
+				open.setLayout(null);
+				open.add(openFilePath);
+				open.add(openButton);
+			openAndSave.add(save);
+				save.setLayout(null);
+				save.add(saveFilePath);
+				save.add(saveButton);
+		frame.getContentPane().add(edit);
+			edit.setLayout(null);
+			edit.add(editScrollPane);
+		frame.getContentPane().add(buttonSet);
+			buttonSet.setLayout(null);
+			buttonSet.add(compileButton);
+			buttonSet.add(runButton);
+			buttonSet.add(saveErrorButton);
+			buttonSet.add(deleteButton);
+			buttonSet.add(clearButton);
+		frame.getContentPane().add(result);
+			result.setLayout(null);
+			result.add(resultScrollPane);
+		/*
+		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(resultWindowArea, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
-						.addComponent(editingWindowArea, GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+						.addComponent(editingWindowArea, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+						.addComponent(resultWindowArea, GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(compileButton, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -83,8 +148,8 @@ public class View {
 							.addComponent(clearButton, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(openFilePath, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-								.addComponent(saveFilePath, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+								.addComponent(openFilePath, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+								.addComponent(saveFilePath, GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(saveButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -118,6 +183,7 @@ public class View {
 					.addContainerGap())
 		);
 		frame.getContentPane().setLayout(groupLayout);
+		*/
 	}
 	/**
 	 * generate a getter and setter
@@ -217,6 +283,4 @@ public class View {
 	public void setRunButton(JButton runButton) {
 		this.runButton = runButton;
 	}
-	
-	
 }
