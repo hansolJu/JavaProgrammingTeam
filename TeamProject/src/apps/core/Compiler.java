@@ -14,7 +14,7 @@ public class Compiler {
 	//파일 경로, 파일 이름
 	private String filePath="";
 	private String fileName="";
-	ArrayList<String> lines = null;
+	ArrayList<String> lines = new ArrayList<String>();
 
 	public void setFile(String filePath, String fileName){
 		this.filePath = filePath;
@@ -24,7 +24,7 @@ public class Compiler {
 	public ArrayList<String> compiler(){
 		Model model = Model.getInstance();
 		String errLine = null;
-		File file = new File(filePath);       //EX)c:\filePath\fileName
+		File file = new File(fileName);       //EX)c:\filePath\fileName
 		if(!file.exists()){
 			lines.add("파일이 없습니다.");
 			model.setIsCompiled(false);
