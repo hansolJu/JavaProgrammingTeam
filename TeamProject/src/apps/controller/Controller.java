@@ -97,7 +97,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
-			compiler.setFile(model.getFilePath(), model.getFileName());
+			compiler.setFile(model.getFileDir(), model.getFileName());
 			lines = compiler.compiler();
 			for(String line : lines) {
 				view.getResultWindowArea().setText(view.getResultWindowArea().getText()+line);
