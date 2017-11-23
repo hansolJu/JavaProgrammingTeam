@@ -40,7 +40,7 @@ public class Controller {
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
 		view.getCompileButton().addActionListener(new compileActionListener());
-		view.getRunnerButton().addActionListener(new runActionListener());
+		view.getRunButton().addActionListener(new runActionListener());
 		view.getSaveErrorButton().addActionListener(new saveErrorsActionListener());
 		view.getDeleteButton().addActionListener(new deleteJavaFileActionListener());
 		view.getClearButton().addActionListener(new clearActionListener());
