@@ -54,10 +54,6 @@ public class Runner {
 		if (model.getFileName().split(".java")[model.getFileName().split(".java").length -1].equals(".java")) //파일 이름이 .java 확장자가 아니라면
 			return false;
 		File file = new File(model.getFilePath());
-		if(!file.exists()) {
-			resultList.add("\t파일이 존재하지 않습니다..");
-			return false;
-		}
 		return true;
 	}
 }

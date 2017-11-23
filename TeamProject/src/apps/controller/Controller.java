@@ -2,7 +2,7 @@
  * 컨트롤러 작성
  * 작성일 : 17.11.16
  * 수정일 : 17.11.23
- * 수정 내용 : run버튼에 이벤트 추가
+ * 수정 내용 : open버튼 예외처리
  * @author 정은진
  * 
  */
@@ -52,13 +52,17 @@ public class Controller {
 			view.getEditingWindowArea().setText("");
 			ArrayList<String> lines;
 			String filePath = view.getOpenFilePath().getText();
-			if (inputFile(filePath)) {
+			if(checkFile(filePath)) {
+				inputFile(filePath);
 				lines = readFile(filePath);
 				for(String line : lines)
 					view.getEditingWindowArea().setText(view.getEditingWindowArea().getText() + line + "\n");
 			}
-			else
+			else {
+				model.setFilePath("");
+				inputFile(filePath);
 				view.getResultWindowArea().setText("파일을 찾을 수 없습니다...");
+			}
 		}
 	}
 	private class saveJavaFileActionListener implements ActionListener {	//자바 파일 저장 리스너
@@ -77,6 +81,10 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			view.getResultWindowArea().setText("");
 			ArrayList<String> list;
+			if(model.getFileDir() ==  null || model.getFileName() == null) {
+				view.getResultWindowArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+				return;
+			}
 			list = runner.run(model.getIsCompiled());
 			for(String line : list)
 				view.getResultWindowArea().setText(view.getResultWindowArea().getText() + line + "\n");
@@ -145,15 +153,9 @@ public class Controller {
 		}
 	}
 
-	public boolean inputFile(String filePath) {  //파일 경로를 model클래스에 저장
-		//if file exist
-		if(checkFile(filePath)) {
-			model.setFilePath(filePath);
-			setFile();
-			return true;
-		}
-		else
-			return false;
+	public void inputFile(String filePath) {  //파일 경로를 model클래스에 저장
+		model.setFilePath(filePath);
+		setFile();
 	}
 	private void setFile() {  //파일 정보를 model클래스에 저장
 		String [] fileInfoArray = FileDirSeperator();
@@ -220,11 +222,17 @@ public class Controller {
 		String [] lines = view.getEditingWindowArea().getText().split("\n");
 		ArrayList<String> list= new ArrayList<>(Arrays.asList(lines));  //배열 -> 리스트
 		if(saveFilePath.equals("")) {  //저장 경로에 아무 텍스트가 없을 때
+			if(openFilePath.equals("")) {
+				view.getResultWindowArea().setText("지정한 파일이 없습니다.");
+				return;
+			}
 			saveFile(openFilePath, list);
 			view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
 		}
-		if(openFilePath.equals(saveFilePath))  //오픈 경로와 세이브 경로가 같을 때
-			view.getResultWindowArea().setText("중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
+		if(openFilePath.equals(saveFilePath)) { //오픈 경로와 세이브 경로가 같을 때
+			view.getResultWindowArea().setText("열린 파일과 중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
+			return;
+		}
 		else {	
 			saveFile(saveFilePath, list);
 			view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
