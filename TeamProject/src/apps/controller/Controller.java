@@ -106,12 +106,17 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				if(model.getIsCompiled() == false) {
-					ArrayList<String> lines = new ArrayList<String>(); 
-					String[] result = view.getResultWindowArea().getText().split("\n");
-					for(String line : result)
-						lines.add(line);
-					saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);
-					view.getResultWindowArea().setText("오류 저장을 완료했습니다.");
+					if(model.getFileName() == null || model.getFileDir() == null) {
+						view.getResultWindowArea().setText("열린 파일이 없습니다.");
+					}
+					else {
+						ArrayList<String> lines = new ArrayList<String>(); 
+						String[] result = view.getResultWindowArea().getText().split("\n");
+						for(String line : result)
+							lines.add(line);
+						saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);
+						view.getResultWindowArea().setText("오류 저장을 완료했습니다.");
+					}
 				}
 				else
 					view.getResultWindowArea().setText("Not Error!!");
