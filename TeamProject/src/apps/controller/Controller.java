@@ -86,8 +86,9 @@ public class Controller {
 	private class compileActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
-			compiler.setFile(model.getFilePath(), model.getFileName());
+			compiler.setFile(model.getFileDir(), model.getFileName());
 			lines = compiler.compiler();
 			for(String line : lines) {
 				view.getResultWindowArea().setText(view.getResultWindowArea().getText()+line);
@@ -104,7 +105,7 @@ public class Controller {
 						return;
 					else {
 						ArrayList<String> lines = new ArrayList<String>(); 
-						String[] result = view.getResultWindowArea().getText().split("\r\n");
+						String[] result = view.getResultWindowArea().getText().split("\n");
 						for(String line : result)
 							lines.add(line);
 						saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);

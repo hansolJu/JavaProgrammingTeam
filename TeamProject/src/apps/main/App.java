@@ -11,5 +11,4 @@ public class App {
 		Controller c = new Controller(m,v);
 		c.initController();
 	}
-
 }
