@@ -1,7 +1,8 @@
 /**
  * 컨트롤러 작성
  * 작성일 : 17.11.16
- * 수정일 : 17.11.16
+ * 수정일 : 17.11.23
+ * 수정 내용 : run버튼에 이벤트 추가
  * @author 정은진
  * 
  */
@@ -41,7 +42,7 @@ public class Controller {
 		view.getOpenButton().addActionListener(new openJavaFileActionListener());
 		view.getSaveButton().addActionListener(new saveJavaFileActionListener());
 		view.getCompileButton().addActionListener(new compileActionListener());
-		view.getRunnerButton().addActionListener(new runActionListener());
+		view.getRunButton().addActionListener(new runActionListener());
 		view.getSaveErrorButton().addActionListener(new saveErrorsActionListener());
 		view.getDeleteButton().addActionListener(new deleteJavaFileActionListener());
 		view.getClearButton().addActionListener(new clearActionListener());

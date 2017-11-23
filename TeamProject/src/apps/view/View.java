@@ -211,6 +211,12 @@ public class View {
 	public void setResultWindowArea(JTextArea resultWindowArea) {
 		this.resultWindowArea = resultWindowArea;
 	}
+	public JButton getRunButton() {
+		return runButton;
+	}
+	public void setRunButton(JButton runButton) {
+		this.runButton = runButton;
+	}
 	
 	
 }
