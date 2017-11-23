@@ -88,11 +88,15 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			view.getResultWindowArea().setText("");
 			ArrayList<String> lines;
-			System.out.println("경로 : " + model.getFileDir() + "파일 : " + model.getFileName());
-			compiler.setFile(model.getFileDir(), model.getFileName());
-			lines = compiler.compiler();
-			for(String line : lines) {
-				view.getResultWindowArea().setText(view.getResultWindowArea().getText()+line);
+			if(model.getFileDir() ==  null || model.getFileName() == null) {
+				view.getResultWindowArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+			}
+			else {
+				compiler.setFile(model.getFileDir(), model.getFileName());
+				lines = compiler.compiler();
+				for(String line : lines) {
+					view.getResultWindowArea().setText(view.getResultWindowArea().getText()+line);
+				}
 			}
 		}
 	}
@@ -102,19 +106,15 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				if(model.getIsCompiled() == false) {
-					if(view.getResultWindowArea().getText() == null)
-						return;
-					else {
-						ArrayList<String> lines = new ArrayList<String>(); 
-						String[] result = view.getResultWindowArea().getText().split("\n");
-						for(String line : result)
-							lines.add(line);
-						saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);
-						view.getResultWindowArea().setText("오류 저장을 완료했습니다.");
-					}
+					ArrayList<String> lines = new ArrayList<String>(); 
+					String[] result = view.getResultWindowArea().getText().split("\n");
+					for(String line : result)
+						lines.add(line);
+					saveFile(model.getFileDir() + model.getFileName()+ ".error", lines);
+					view.getResultWindowArea().setText("오류 저장을 완료했습니다.");
 				}
 				else
-					view.getEditingWindowArea().setText("compiled successfully.....");
+					view.getResultWindowArea().setText("compiled successfully.....");
 			}catch(IOException ie) {
 				view.getResultWindowArea().setText((ie.getMessage()));
 			}
@@ -164,16 +164,18 @@ public class Controller {
 	}
 
 	public boolean deleteFile() {  //파일 삭제 후 model필드 변수 리셋
+		if(model.getFilePath() == null)
+			return false;
 		File file = new File(model.getFilePath());
 		if(file.delete()) {
 			model.setFilePath("");
 			model.setFileDir("");
 			model.setFileName("");
-			System.out.println("파일을 삭제 하였습니다.");
+			view.getResultWindowArea().setText("파일을 삭제하였습니다.");
 			return true;
 		}
 		else {
-			System.out.println("파일이 존재하지 않습니다..");
+			view.getResultWindowArea().setText("파일이 존재 하지 않습니다.");
 			return false;
 		}
 	}
