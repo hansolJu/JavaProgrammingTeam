@@ -114,7 +114,7 @@ public class Controller {
 					view.getResultWindowArea().setText("오류 저장을 완료했습니다.");
 				}
 				else
-					view.getResultWindowArea().setText("compiled successfully.....");
+					view.getResultWindowArea().setText("Not Error!!");
 			}catch(IOException ie) {
 				view.getResultWindowArea().setText((ie.getMessage()));
 			}
