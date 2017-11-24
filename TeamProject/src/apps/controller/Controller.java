@@ -1,8 +1,12 @@
 /**
  * 컨트롤러 작성
  * 작성일 : 17.11.16
+ * 수정자 : 정은진
  * 수정일 : 17.11.23
  * 수정 내용 : open버튼 예외처리
+ * 수정자 : 주한솔
+ * 수정일 : 17.11.25
+ * 수정내용 : 파일을 찾을수 없습니다...->파일을 찾을수 없습니다. 와 같은 오류메세지 출력 수정
  * @author 정은진
  * 
  */
@@ -61,7 +65,7 @@ public class Controller {
 			else {
 				model.setFilePath("");
 				inputFile(filePath);
-				view.getResultWindowArea().setText("파일을 찾을 수 없습니다...");
+				view.getResultWindowArea().setText("파일을 찾을 수 없습니다.");
 			}
 		}
 	}
@@ -115,7 +119,7 @@ public class Controller {
 			try {
 				if(model.getIsCompiled() == false) {
 					if(model.getFileName() == null || model.getFileDir() == null) {
-						view.getResultWindowArea().setText("열린 파일이 없습니다.");
+						view.getResultWindowArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
 					}
 					else {
 						ArrayList<String> lines = new ArrayList<String>(); 
@@ -137,9 +141,9 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(deleteFile()) 
-				view.getResultWindowArea().setText("Delete Success!!");
+				view.getResultWindowArea().setText("파일을 삭제 되었습니다.");
 			else
-				view.getResultWindowArea().setText("Delete Fail!!");
+				view.getResultWindowArea().setText("파일을 삭제 할수 없습니다.\n파일을 확인해주세요.");
 		}
 
 	}
