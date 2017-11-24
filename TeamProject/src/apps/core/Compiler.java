@@ -1,3 +1,10 @@
+/**
+ * 작성자 : UNS 채지훈
+ * 작성일 : 2017.11.16 Thursday
+ * 수정자 : 주한솔
+ * 수정내용 : 주석위치 변경(제발 룰좀 지킵시다.)
+ * 수정일 : 17.11.25
+ */
 package apps.core;
 
 import java.io.*;
@@ -5,13 +12,8 @@ import java.util.ArrayList;
 
 import apps.model.Model;
 
-/**
- * 작성자 : UNS
- * 수정일 : 2017.11.16 Thursday
- *
- */
 public class Compiler {
-	//파일 경로, 파일 이름
+	//파일 경로, 파일 이름등 변수들
 	private String filePath="";
 	private String fileName="";
 	ArrayList<String> lines = new ArrayList<String>();
@@ -20,7 +22,6 @@ public class Compiler {
 		this.filePath = filePath;
 		this.fileName = fileName;
 	}
-
 	public ArrayList<String> compiler(){
 		Model model = Model.getInstance();
 		String errLine = null;
@@ -43,7 +44,6 @@ public class Compiler {
 			else {
 				model.setIsCompiled(false);
 			}
-
 		}catch(IOException e){
 			e.printStackTrace();
 			model.setIsCompiled(false);

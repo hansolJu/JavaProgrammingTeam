@@ -173,7 +173,6 @@ public class Controller {
 		else 
 			return false;
 	}
-
 	public boolean deleteFile() {  //파일 삭제 후 model필드 변수 리셋
 		if(model.getFilePath() == null)
 			return false;
@@ -191,7 +190,6 @@ public class Controller {
 		}
 	}
 	/**
-	 * 
 	 * @param compiledFileName
 	 * 파일명과 디렉터리명을 분리하여 필드 변수에 저장
 	 */
@@ -215,7 +213,6 @@ public class Controller {
 		return fileArray;
 	}
 	/**
-	 * 
 	 * @param openFilePath : 저장하려는 경로가 지정되지 않았을 경우 오픈 파일에 덮어쓰기
 	 * @param saveFilePath : 저장하려는 파일 경로
 	 * @call saveFile : 파일 중복을 막고, saveError를 위해 작성된 saveFile메소드를 호출하여 파일에 출력

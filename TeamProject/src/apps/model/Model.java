@@ -1,7 +1,6 @@
 /**
  * 파일의 정보가 들어간 model 클래스
  * 싱글턴 패턴으로 작성
- * 
  * 작성일 : 17.11.16
  * 수정일 : 17.11.16
  * 작성자 : 정은진
@@ -14,9 +13,9 @@ public class Model {
 	private String filePath;
 	private String fileName;
 	private String fileDir;
-	private boolean isCompiled =false;
+	private boolean isCompiled = false;
 	
-	private Model() {
+	private Model() {//이거 왜만든거냐-- 한솔
 	}
 	public static Model getInstance() {
 		return instance;
