@@ -15,7 +15,7 @@ public class Model {
 	private String fileDir;
 	private boolean isCompiled = false;
 	
-	private Model() {//이거 왜만든거냐-- 한솔
+	private Model() {
 	}
 	public static Model getInstance() {
 		return instance;
