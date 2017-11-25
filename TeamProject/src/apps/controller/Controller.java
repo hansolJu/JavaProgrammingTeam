@@ -222,15 +222,16 @@ public class Controller {
 	public void saveJavaFile(String openFilePath, String saveFilePath) throws IOException {
 		String [] lines = view.getEditingWindowArea().getText().split("\n");
 		ArrayList<String> list= new ArrayList<>(Arrays.asList(lines));  //배열 -> 리스트
-		if(saveFilePath.equals("")) {  //저장 경로에 아무 텍스트가 없을 때
+		if(saveFilePath.equals("")) {  //저장 경로에 아무 텍스트가 없을 때--> 오픈경로와 동일하게 저장.
 			if(openFilePath.equals("")) {
 				view.getResultWindowArea().setText("지정한 파일이 없습니다.");
 				return;
 			}
+			view.getSaveFilePath().setText(openFilePath);//savepath에 경로 박아주기
 			saveFile(openFilePath, list);
-			view.getResultWindowArea().setText(view.getOpenFilePath().getText() + "에 저장했습니다.\n");
+			view.getResultWindowArea().setText(openFilePath + "에 저장했습니다.");
 		}
-		if(openFilePath.equals(saveFilePath)) { //오픈 경로와 세이브 경로가 같을 때
+		else if(openFilePath.equals(saveFilePath)) { //오픈 경로와 세이브 경로가 같을 때
 			view.getResultWindowArea().setText("열린 파일과 중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
 			return;
 		}
