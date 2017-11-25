@@ -46,11 +46,11 @@ public class View {
 
 	public View(String title) {
 		//Create the principal frame
-		frame  = new JFrame(title);
+		frame = new JFrame(title);
 		frame.getContentPane().setLayout(null);
 		frame.setBounds(100, 100, 493, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);//프레임 중앙에 배치.
+		frame.setLocationRelativeTo(null);// 프레임 중앙에 배치.
 		frame.setResizable(false);
 		// panel
 		open = new JPanel();
@@ -76,7 +76,7 @@ public class View {
 		openFilePath.setBounds(2, 5, 380, 30);
 		openFilePath.setColumns(10);
 		saveFilePath = new JTextField();
-		saveFilePath.setBounds(2,5,380, 30);
+		saveFilePath.setBounds(2, 5, 380, 30);
 		saveFilePath.setColumns(10);
 			//Button
 		openButton = new JButton("Open");
@@ -105,7 +105,7 @@ public class View {
 		editScrollPane = new JScrollPane(editingWindowArea);
 		editScrollPane.setBounds(2, 2, 479, 315);
 		editingWindowArea.setCaretPosition(editingWindowArea.getDocument().getLength());
-		
+
 		resultWindowArea = new JTextArea();
 		resultScrollPane = new JScrollPane(resultWindowArea);
 		resultScrollPane.setBounds(2, 2, 479, 316);
