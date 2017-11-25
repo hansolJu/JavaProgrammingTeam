@@ -20,6 +20,12 @@ import javax.swing.JTextField;
 
 public class View {
 	private JFrame frame;
+	private JPanel open;
+	private JPanel save;
+	private JPanel openAndSave;
+	private JPanel edit;
+	private JPanel buttonSet;
+	private JPanel result;
 	private JTextField openFilePath;
 	private JTextField saveFilePath;
 	private JButton openButton;
@@ -43,21 +49,21 @@ public class View {
 		frame.setLocationRelativeTo(null);//프레임 중앙에 배치.
 		frame.setResizable(false);
 		// panel
-		JPanel open = new JPanel();
+		open = new JPanel();
 		open.setSize(483, 40);
 		open.setLocation(2, 0);
-		JPanel save = new JPanel();
+		save = new JPanel();
 		save.setSize(483, 40);
 		save.setLocation(2, 40);
-		JPanel openAndSave = new JPanel();
+		openAndSave = new JPanel();
 		openAndSave.setSize(485, 80);
-		JPanel edit = new JPanel();
+		edit = new JPanel();
 		edit.setSize(480, 320);
 		edit.setLocation(2, 80);
-		JPanel buttonSet = new JPanel();
+		buttonSet = new JPanel();
 		buttonSet.setSize(480, 40);
 		buttonSet.setLocation(2, 400);
-		JPanel result = new JPanel();
+		result = new JPanel();
 		result.setSize(480, 320);
 		result.setLocation(2, 440);
 		//Create UI elements
