@@ -7,7 +7,7 @@
  * 수정자: 주한솔
  * 수정내용: 레이아웃최적화(17.11.25)
  * 수정자: 주한솔
- * 수정내용: Jpanel 접근 지정자 추가(17.11.25)
+ * 수정내용: Jpanel,JScrollPane 접근 지정자 추가(17.11.25)
  * 
  * 최종수정일: 17.11.25
  * 
@@ -40,7 +40,8 @@ public class View {
 	private JButton clearButton;
 	private JTextArea editingWindowArea;
 	private JTextArea resultWindowArea;
-	
+	private JScrollPane editScrollPane;
+	private JScrollPane resultScrollPane;
 	
 
 	public View(String title) {
@@ -99,13 +100,14 @@ public class View {
 		clearButton = new JButton("Clear");
 		clearButton.setSize(90, 35);
 		clearButton.setLocation(390, 2);
-			//TextArea
+			//ScrollPane&TextArea
 		editingWindowArea = new JTextArea();
-		JScrollPane editScrollPane = new JScrollPane(editingWindowArea);
+		editScrollPane = new JScrollPane(editingWindowArea);
 		editScrollPane.setBounds(2, 2, 479, 315);
 		editingWindowArea.setCaretPosition(editingWindowArea.getDocument().getLength());
+		
 		resultWindowArea = new JTextArea();
-		JScrollPane resultScrollPane = new JScrollPane(resultWindowArea);
+		resultScrollPane = new JScrollPane(resultWindowArea);
 		resultScrollPane.setBounds(2, 2, 479, 316);
 		resultWindowArea.setCaretPosition(resultWindowArea.getDocument().getLength());
 		
