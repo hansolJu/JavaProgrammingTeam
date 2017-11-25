@@ -234,11 +234,17 @@ public class Controller {
 			saveFile(openFilePath, list);
 			view.getResultWindowArea().setText(openFilePath + "에 저장했습니다.");
 		}
+		/*
 		else if(openFilePath.equals(saveFilePath)) { //오픈 경로와 세이브 경로가 같을 때
 			view.getResultWindowArea().setText("열린 파일과 중복된 파일명입니다. 다른 저장 파일명으로 입력해주세요");
 			return;
 		}
-		else {	
+		*/
+		else if(openFilePath.equals("")&(isFile(saveFilePath)==true)){
+			view.getResultWindowArea().setText("이미 존재하는 파일명입니다. 다른 저장 파일명으로 입력해주세요");
+			return;
+		}
+		else{	
 			saveFile(saveFilePath, list);
 			view.getResultWindowArea().setText(view.getSaveFilePath().getText() + "에 저장했습니다. \n");
 		}
@@ -264,5 +270,13 @@ public class Controller {
 			e.printStackTrace();
 		}
 		return lines;
+	}
+	public boolean isFile(String FilePath) {// 파일 존재 여부 판단
+		File f = new File(FilePath);
+		if (f.isFile()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
