@@ -8,7 +8,9 @@
  * 수정내용: 레이아웃최적화(17.11.25)
  * 수정자: 주한솔
  * 수정내용: Jpanel,JScrollPane 접근 지정자 추가(17.11.25)
- * 
+ * 수정자: 주한솔
+ * 수정내용: 주석추가 (17.11.25)
+ *
  * 최종수정일: 17.11.25
  * 
  */
@@ -22,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class View {
+	//View에 사용되는 컴포넌트 정의
 	private JFrame frame;
 	private JPanel open;
 	private JPanel save;
@@ -51,23 +54,23 @@ public class View {
 		frame.setBounds(100, 100, 493, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);// 프레임 중앙에 배치.
-		frame.setResizable(false);
-		// panel
+		frame.setResizable(false); //리사이즈를 막는 메서드.
+			//panel
 		open = new JPanel();
 		open.setSize(483, 40);
 		open.setLocation(2, 0);
 		save = new JPanel();
 		save.setSize(483, 40);
 		save.setLocation(2, 40);
-		openAndSave = new JPanel();
+		openAndSave = new JPanel(); //열기와 저장에 관련된 컴포넌트 패널
 		openAndSave.setSize(485, 80);
-		edit = new JPanel();
+		edit = new JPanel(); //편집 텍스트Area와  관련된 컴포넌트 패널
 		edit.setSize(480, 320);
 		edit.setLocation(2, 80);
-		buttonSet = new JPanel();
+		buttonSet = new JPanel(); //컴파일 및 기타 버튼과 관련된 컴포넌트 패널
 		buttonSet.setSize(480, 40);
 		buttonSet.setLocation(2, 400);
-		result = new JPanel();
+		result = new JPanel(); // 결과 텍스트 Area와 관련된 컴포넌트 패널
 		result.setSize(480, 320);
 		result.setLocation(2, 440);
 		//Create UI elements
@@ -136,7 +139,7 @@ public class View {
 		frame.getContentPane().add(result);
 			result.setLayout(null);
 			result.add(resultScrollPane);
-		frame.setVisible(true);//컴포넌트를 다 추가하고 설정해야지 화면이 잘보임
+		frame.setVisible(true);//컴포넌트를 다 추가하고 설정해야지 화면이 잘보임.
 	}
 	/**
 	 * generate a getter and setter
@@ -146,87 +149,66 @@ public class View {
 	public JFrame getFrame() {
 		return frame;
 	}
-
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
-
 	public JTextField getOpenFilePath() {
 		return openFilePath;
 	}
-
 	public void setOpenFilePath(JTextField openFilePath) {
 		this.openFilePath = openFilePath;
 	}
-
 	public JTextField getSaveFilePath() {
 		return saveFilePath;
 	}
-
 	public void setSaveFilePath(JTextField saveFilePath) {
 		this.saveFilePath = saveFilePath;
 	}
-
 	public JButton getOpenButton() {
 		return openButton;
 	}
-
 	public void setOpenButton(JButton openButton) {
 		this.openButton = openButton;
 	}
-
 	public JButton getSaveButton() {
 		return saveButton;
 	}
-
 	public void setSaveButton(JButton saveButton) {
 		this.saveButton = saveButton;
 	}
-
 	public JButton getCompileButton() {
 		return compileButton;
 	}
-
 	public void setCompileButton(JButton compileButton) {
 		this.compileButton = compileButton;
 	}
-
 	public JButton getSaveErrorButton() {
 		return saveErrorButton;
 	}
-
 	public void setSaveErrorButton(JButton saveErrorButton) {
 		this.saveErrorButton = saveErrorButton;
 	}
-
 	public JButton getDeleteButton() {
 		return deleteButton;
 	}
-
 	public void setDeleteButton(JButton deleteButton) {
 		this.deleteButton = deleteButton;
 	}
-
 	public JButton getClearButton() {
 		return clearButton;
 	}
-
 	public void setClearButton(JButton clearButton) {
 		this.clearButton = clearButton;
 	}
-
 	public JTextArea getEditingWindowArea() {
 		return editingWindowArea;
 	}
-
 	public void setEditingWindowArea(JTextArea editingWindowArea) {
 		this.editingWindowArea = editingWindowArea;
 	}
-
 	public JTextArea getResultWindowArea() {
 		return resultWindowArea;
 	}
-
 	public void setResultWindowArea(JTextArea resultWindowArea) {
 		this.resultWindowArea = resultWindowArea;
 	}
