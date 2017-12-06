@@ -9,7 +9,7 @@
 package apps.model;
 
 public class Model {
-	private static Model instance = new Model();
+	private static Model instance;
 	private String filePath;
 	private String fileName;
 	private String fileDir;
@@ -17,7 +17,9 @@ public class Model {
 	
 	private Model() {
 	}
-	public static Model getInstance() {
+	public synchronized static Model getInstance() {
+		if(instance == null)
+			instance = new Model();
 		return instance;
 	}
 	public String getFilePath() {
