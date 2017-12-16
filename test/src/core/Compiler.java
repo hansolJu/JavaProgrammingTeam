@@ -23,7 +23,7 @@ public class Compiler {
 		this.fileName = fileName;
 	}
 	public ArrayList<String> compiler(){
-		Model model = Model.getInstance();
+		Model model = new Model();
 		String errLine = null;
 		File file = new File(filePath, fileName);       //EX)c:\filePath\fileName
 		if(!file.exists()){

@@ -1,55 +1,73 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 
-public class GUI {
+import model.Model;
 
-	private JFrame frame;
-
-	private JMenuItem openMenuItem;
-	private JMenuItem closeMenuItem;
-	private JMenuItem saveMenuItem;
-	private JMenuItem saveAsMenuItem;
-	private JMenuItem quitMenuItem;
-	private JMenuItem compileMenuItem;
-	private JMenuItem runMenuItem;
-
+public class GUI extends JFrame{
+	private JMenuBar menuBar;
+	private JMenu fileMenu, runMenu; 
+	private JMenuItem openMenuItem, closeMenuItem, saveMenuItem, saveAsMenuItem, quitMenuItem;
+	private JMenuItem compileMenuItem, runMenuItem;
 	private JTabbedPane tabbedPane;
-	private JPanel mainPanel;
-
-	private JTextArea editingTextArea;
-	private JTextArea resultTextArea;
-
-	/**
-	 * Create the application.
-	 */
+	private HashMap<Model, TabPanel> tabPanelMap;
 	public GUI(String title) {
-		initialize(title);
+		setTitle(title);
+		setBounds(100, 100, 493, 800);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);// 프레임 중앙에 배치.
+		setResizable(false); //리사이즈를 막는 메서드.
+
+		createMenu();
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(String title) {
-		frame = new JFrame(title);
-		frame.setBounds(100, 100, 400, 599);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+	private void initialize() {
+		tabPanelMap = new HashMap<Model,TabPanel>();
+		tabbedPane = new JTabbedPane();
+		
+		TabPanel tabPanel = new TabPanel();
+		tabbedPane.add("test", tabPanel); //파일이름과 panel
 
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 384, 21);
-		frame.getContentPane().add(menuBar);
+		add(tabbedPane);
+		
+		setVisible(true);
+	}
+	public void addTap(Model model, TabPanel tabPanel) {
+		if(checkModel(model)) {  //새로운 모델이라면
+			tabPanelMap.put(model, tabPanel);
+			
+			tabbedPane.add(model.getFileName(), tabPanel); //파일이름과 panel
+		}
+	}
+	private boolean checkModel(Model model) {
+		Iterator<Model> it = tabPanelMap.keySet().iterator();
+		while(it.hasNext()) {
+			if(model.getFilePath().equals(it.next().getFilePath()))  //path가 이미 있다면
+				return false;
+		}
+		return true;
+	}
+	private void createMenu() {
+		menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("File");
-		menuBar.add(fileMenu);
+		getContentPane().add(menuBar);
+
+		fileMenu = new JMenu("File");
+		menuBar.add(fileMenu);//
 
 		openMenuItem = new JMenuItem("Open");
 		fileMenu.add(openMenuItem);
@@ -66,7 +84,7 @@ public class GUI {
 		quitMenuItem = new JMenuItem("Quit");
 		fileMenu.add(quitMenuItem);
 
-		JMenu runMenu = new JMenu("Run");
+		runMenu = new JMenu("Run");
 		menuBar.add(runMenu);
 
 		compileMenuItem = new JMenuItem("Compile");
@@ -75,61 +93,23 @@ public class GUI {
 		runMenuItem = new JMenuItem("Run");
 		runMenu.add(runMenuItem);
 
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 21, 384, 540);
-		frame.getContentPane().add(tabbedPane);
-
-		mainPanel = new JPanel();
-		tabbedPane.addTab("New File", mainPanel);
-		tabbedPane.addTab("New File2",new MyPanel());
-		mainPanel.setLayout(null);
-
-		editingTextArea = new JTextArea();
-		JScrollPane editingScrollPane = new JScrollPane(editingTextArea);
-		editingScrollPane.setBounds(0, 0, 379, 322);
-		mainPanel.add(editingScrollPane);
-
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 322, 379, 1);
-		mainPanel.add(separator);
-
-		resultTextArea = new JTextArea();
-		JScrollPane resultScrollPane = new JScrollPane(resultTextArea);
-		resultScrollPane.setBounds(0, 323, 380, 187);
-		mainPanel.add(resultScrollPane);
-		frame.setVisible(true);
-
+		setJMenuBar(menuBar);
 	}
 
-	class MyPanel extends JPanel {
-		public MyPanel() {
-			JPanel mainPanel = new JPanel();
-			mainPanel.setLayout(null);
-
-			JTextArea editingTextArea = new JTextArea();
-			JScrollPane editingScrollPane = new JScrollPane(editingTextArea);
-			editingScrollPane.setBounds(0, 0, 379, 322);
-			mainPanel.add(editingScrollPane);
-
-			JSeparator separator = new JSeparator();
-			separator.setBounds(0, 322, 379, 1);
-			mainPanel.add(separator);
-
-			JTextArea resultTextArea = new JTextArea();
-			JScrollPane resultScrollPane = new JScrollPane(resultTextArea);
-			resultScrollPane.setBounds(0, 323, 380, 187);
-			mainPanel.add(resultScrollPane);
-		}
-		
+	public JMenu getFileMenu() {
+		return fileMenu;
 	}
 
-	// 컨트롤러에서 컨트롤하기위한 getter/setter
-	public JFrame getFrame() {
-		return frame;
+	public void setFileMenu(JMenu fileMenu) {
+		this.fileMenu = fileMenu;
 	}
 
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
+	public JMenu getRunMenu() {
+		return runMenu;
+	}
+
+	public void setRunMenu(JMenu runMenu) {
+		this.runMenu = runMenu;
 	}
 
 	public JMenuItem getOpenMenuItem() {
@@ -188,20 +168,12 @@ public class GUI {
 		this.runMenuItem = runMenuItem;
 	}
 
-	public JTextArea getEditingTextArea() {
-		return editingTextArea;
+	public HashMap<Model, TabPanel> getTabPanelMap() {
+		return tabPanelMap;
 	}
 
-	public void setEditingTextArea(JTextArea editingTextArea) {
-		this.editingTextArea = editingTextArea;
-	}
-
-	public JTextArea getResultTextArea() {
-		return resultTextArea;
-	}
-
-	public void setResultTextArea(JTextArea resultTextArea) {
-		this.resultTextArea = resultTextArea;
+	public void setTabPanelMap(HashMap<Model, TabPanel> tabPanelMap) {
+		this.tabPanelMap = tabPanelMap;
 	}
 
 	public JTabbedPane getTabbedPane() {
@@ -211,13 +183,5 @@ public class GUI {
 	public void setTabbedPane(JTabbedPane tabbedPane) {
 		this.tabbedPane = tabbedPane;
 	}
-
-	public JPanel getMainPanel() {
-		return mainPanel;
-	}
-
-	public void setMainPanel(JPanel mainPanel) {
-		this.mainPanel = mainPanel;
-	}
-
+	
 }

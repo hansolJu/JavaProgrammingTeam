@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import model.Model;
 
 public class Runner {
-	private Model model = Model.getInstance();
+	private Model model = new Model();
 	private ArrayList<String> resultList;
 	/**
 	 * 
