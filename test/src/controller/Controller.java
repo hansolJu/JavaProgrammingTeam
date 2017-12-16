@@ -18,6 +18,8 @@ package controller;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,6 +28,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -58,7 +62,7 @@ public class Controller {
 		gui.getRunMenuItem().addActionListener(new runActionListener());
 	}
 
-	private class saveAsJavaFileActionListener implements ActionListener {
+	private class saveAsJavaFileActionListener implements ActionListener {  //다른이름으로 저장
 		private JFileChooser chooser;
 		public saveAsJavaFileActionListener() {
 			chooser = new JFileChooser();// 객체 생성
@@ -100,7 +104,7 @@ public class Controller {
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 
 			if (selected != null) {
-				gui.getTabPanelMap().remove(gui.getTabPanelMap().remove(tabPanel));  //해쉬맵에서 제거
+				gui.getTabPanelMap().remove(gui.getTabPanelMap().getKey(tabPanel));  //해쉬맵에서 제거
 				gui.getTabbedPane().remove(tabPanel);  //tabpane에서 제거
 			}
 		}
@@ -129,7 +133,6 @@ public class Controller {
 				JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-
 			model.setFilePath(chooser.getSelectedFile().getPath());
 			model.setFileName(chooser.getSelectedFile().getName());
 			model.setFileDir(chooser.getSelectedFile().getParent()); // 모델에 저장
@@ -138,6 +141,12 @@ public class Controller {
 			for (String line : lines) // editingErea에 넣기
 				tabPanel.getEditingTextArea().setText(tabPanel.getEditingTextArea().getText() + line + "\n");
 
+			gui.getTabbedPane().addKeyListener(new panelKeyActionListener());  //탭에 키리스너 추가
+			gui.getTabbedPane().setFocusable(true);
+			tabPanel.getEditingTextArea().addKeyListener(new panelKeyActionListener());  //editArea에 키리스너 추가
+			tabPanel.getEditingTextArea().setFocusable(true);
+			tabPanel.getResultTextArea().addKeyListener(new panelKeyActionListener());  //resultArea에 키리스너 추가
+			tabPanel.getResultTextArea().setFocusable(true);
 			gui.addTap(model, tabPanel);
 		}
 	}
@@ -150,11 +159,12 @@ public class Controller {
 			Model model = gui.getTabPanelMap().getKey(tabPanel);
 			if (selected != null) {
 				if (model.getFilePath() != null)
-					try {
-						saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
-					} catch (IOException ie) {
-						tabPanel.getResultTextArea().setText(ie.getMessage());
-					}
+					model.setIsCompiled(false);  //다시 컴파일하도록
+				try {
+					saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
+				} catch (IOException ie) {
+					tabPanel.getResultTextArea().setText(ie.getMessage());
+				}
 			}
 		}
 	}
@@ -164,16 +174,10 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			Model model = gui.getTabPanelMap().getKey(tabPanel);
-			tabPanel.getResultTextArea().setText("");
-			ArrayList<String> list;
-			if (model.getFileDir() == null || model.getFileName() == null) {
-				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-				return;
+			if(selected != null) {
+				Model model = gui.getTabPanelMap().getKey(tabPanel);
+				run(model, tabPanel);
 			}
-			list = runner.run(model.getIsCompiled());
-			for (String line : list)
-				tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
 		}
 	}
 
@@ -183,21 +187,64 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			Model model = gui.getTabPanelMap().getKey(tabPanel);
-			tabPanel.getResultTextArea().setText("");
-			ArrayList<String> lines;
-			if (model.getFileDir() == null || model.getFileName() == null) {
-				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-			} else {
-				compiler.setFile(model.getFileDir(), model.getFileName());
-				lines = compiler.compiler();
-				for (String line : lines) {
-					tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
-				}
+			if(selected != null) {
+				Model model = gui.getTabPanelMap().getKey(tabPanel);
+				compile(model, tabPanel);
 			}
 		}
 	}
-
+	private class panelKeyActionListener extends KeyAdapter {
+		private final Set<Integer> pressedSet = new HashSet<>();  //현재 눌러진 키들을 저장하는 set
+		@Override
+		public synchronized void keyPressed(KeyEvent e) {
+			pressedSet.add(e.getKeyCode());  //눌러진 키 추가
+			if (pressedSet.size() == 2) {  //눌러진 키가 2개일 경우
+				if(pressedSet.contains(KeyEvent.VK_CONTROL) && pressedSet.contains(KeyEvent.VK_R)) {  //컨트롤키와 r키를 갖고있을 경우
+					Component selected = gui.getTabbedPane().getSelectedComponent();  //컴파일
+					TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
+					if(selected != null) {
+						Model model = gui.getTabPanelMap().getKey(tabPanel);
+						compile(model, tabPanel);
+					}
+				}
+				else if(pressedSet.contains(KeyEvent.VK_CONTROL) && pressedSet.contains(KeyEvent.VK_F11)) {
+					Component selected = gui.getTabbedPane().getSelectedComponent();  //컴파일
+					TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
+					if(selected != null) {
+						Model model = gui.getTabPanelMap().getKey(tabPanel);
+						run(model, tabPanel);
+					}
+				}
+			}
+		}
+		@Override
+		public synchronized void keyReleased(KeyEvent e) {
+			pressedSet.remove(e.getKeyCode());
+		}
+	}
+	private void compile(Model model, TabPanel tabPanel) {
+		tabPanel.getResultTextArea().setText("");
+		ArrayList<String> lines;
+		if (model.getFileDir() == null || model.getFileName() == null) {
+			tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+		} else {
+			lines = compiler.compile(model);
+			for (String line : lines) {
+				tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
+			}
+		}
+	}
+	private void run(Model model, TabPanel tabPanel) {
+		tabPanel.getResultTextArea().setText("");
+		ArrayList<String> list;
+		if (model.getFileDir() == null || model.getFileName() == null) {
+			tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+			return;
+		}
+		list = runner.run(model);
+		for (String line : list)
+			tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
+	}
 	public ArrayList<String> readFile(String filePath) { // 해당 파일을 불러와서 list로 반환
 		String line = null;
 		ArrayList<String> lines = new ArrayList<String>();

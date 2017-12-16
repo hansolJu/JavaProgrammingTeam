@@ -37,6 +37,7 @@ public class GUI extends JFrame{
 
 		add(tabbedPane);
 		setVisible(true);
+		tabbedPane.setFocusable(true);
 	}
 	public void addTap(Model model, TabPanel tabPanel) {
 		if(checkModel(model)) {  //새로운 모델이라면

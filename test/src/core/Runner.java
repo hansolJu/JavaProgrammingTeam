@@ -6,6 +6,9 @@
  * 수정내용:1.파일 얻어오는법
  * 			2.체크컴파일 수정
  * @author 정은진
+ * 수정일 : 17.12.16
+ * 수정자 : 정은진
+ * 수정내용 : model 이용
  * 
  */
 package core;
@@ -19,19 +22,20 @@ import java.util.ArrayList;
 import model.Model;
 
 public class Runner {
-	private String fileDir="";
-	private String fileName="";
+	private String fileDir;
+	private String fileName;
 	private ArrayList<String> resultList;
-	public void setFile(String fileDir, String fileName){
-		this.fileDir = fileDir;
-		this.fileName = fileName;
-	}
 	/**
 	 * 
 	 * 해당 파일을 실행(run)
 	 */
-	public ArrayList<String> run(boolean isCompiled) {
+	public ArrayList<String> run(Model model) {
+		fileDir = model.getFileDir();
+		fileName = model.getFileName();
+		
 		resultList = new ArrayList<String>();
+		if(!checkCompiled(model.getIsCompiled()))  //잘 컴파일 됐는지 검사
+			return resultList;
 		try {
 			String outLine, errLine;
 			System.out.println(fileDir+fileName);
@@ -61,7 +65,6 @@ public class Runner {
 		}
 		if (fileName.split(".java")[fileName.split(".java").length -1].equals(".java")) //파일 이름이 .java 확장자가 아니라면
 			return false;
-		File file = new File(fileDir+fileName);
 		return true;
 	}
 }

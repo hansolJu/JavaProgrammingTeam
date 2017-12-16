@@ -7,6 +7,9 @@
  * 수정일:17.12.16
  * 수정자:주한솔
  * 수정내용: 파일 위치 받는부분 수정
+ * 수정일 : 17.12.16
+ * 수정자 : 정은진
+ * 수정내용 : model을 이용
  */
 package core;
 
@@ -16,19 +19,16 @@ import java.util.ArrayList;
 import model.Model;
 
 public class Compiler {
-	//파일 경로, 파일 이름등 변수들
-	private String filePath="";
-	private String fileName="";
+	private String filePath;
+	private String fileName;
 	ArrayList<String> lines;
 
-	public void setFile(String filePath, String fileName){
-		this.filePath = filePath;
-		this.fileName = fileName;
-	}
-	public ArrayList<String> compiler(){
-		Model model = new Model();
+	public ArrayList<String> compile(Model model){
+		filePath = model.getFilePath();
+		fileName = model.getFileName();
+
 		String errLine = null;
-		File file = new File(filePath, fileName);       //EX)c:\filePath\fileName
+		File file = new File(filePath);       //EX)c:\filePath\fileName
 		if(!file.exists()){
 			lines = new ArrayList<String>();
 			lines.add("파일이 없습니다.");
@@ -37,7 +37,7 @@ public class Compiler {
 		}
 		try{
 			lines = new ArrayList<String>();
-			Process oProcess = new ProcessBuilder("javac", filePath+"\\"+fileName).start();         //CMD 컴파일 명령
+			Process oProcess = new ProcessBuilder("javac", filePath).start();         //CMD 컴파일 명령
 
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(oProcess.getErrorStream()));
 			while ((errLine = stdError.readLine()) != null) lines.add(errLine+"\n");
