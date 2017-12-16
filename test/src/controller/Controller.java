@@ -64,7 +64,6 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			//Model model = gui.getPanelToModel().get(tabPanel);
 			if(selected != null) {
 				FileDialog saveDialog = new FileDialog(gui, "저장", FileDialog.SAVE);
 				saveDialog.setVisible(true);
@@ -100,7 +99,6 @@ public class Controller {
 			if (selected != null) {
 				gui.getTabPanelMap().remove(gui.getPanelToModel().get(tabPanel));  //해쉬맵에서 제거
 				gui.getPanelToModel().remove(tabPanel);  //해쉬맵에서 제거
-
 				gui.getTabbedPane().remove(tabPanel);  //tabpane에서 제거
 			}
 		}
@@ -152,6 +150,7 @@ public class Controller {
 				if (model.getFilePath() != null) //?
 					try {
 						saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
+						tabPanel.getResultTextArea().setText(model.getFilePath() + "에 저장 성공.");
 					} catch (IOException ie) {
 						tabPanel.getResultTextArea().setText(ie.getMessage());
 					}
@@ -171,6 +170,7 @@ public class Controller {
 				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
 				return;
 			}
+			runner.setFile(model.getFileDir(), model.getFileName());
 			list = runner.run(model.getIsCompiled());
 			for (String line : list)
 				tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");

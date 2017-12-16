@@ -34,7 +34,7 @@ public class Compiler {
 		}
 		try{
 			lines = new ArrayList<String>();
-			Process oProcess = new ProcessBuilder("javac", filePath+fileName).start();         //CMD 컴파일 명령
+			Process oProcess = new ProcessBuilder("javac", filePath+"\\"+fileName).start();         //CMD 컴파일 명령
 
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(oProcess.getErrorStream()));
 			while ((errLine = stdError.readLine()) != null) lines.add(errLine+"\n");

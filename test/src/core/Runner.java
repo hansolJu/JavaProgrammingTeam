@@ -15,8 +15,13 @@ import java.util.ArrayList;
 import model.Model;
 
 public class Runner {
-	private Model model = new Model();
+	private String fileDir="";
+	private String fileName="";
 	private ArrayList<String> resultList;
+	public void setFile(String fileDir, String fileName){
+		this.fileDir = fileDir;
+		this.fileName = fileName;
+	}
 	/**
 	 * 
 	 * 해당 파일을 실행(run)
@@ -27,7 +32,8 @@ public class Runner {
 			return resultList;
 		try {
 			String outLine, errLine;
-			Process oProcess = new ProcessBuilder("java", "-cp", model.getFileDir(), model.getFileName().split(".java")[0]).start();  //cmd 명령어 ex)java -cp C:\temp\ test
+			System.out.println(fileDir+fileName);
+			Process oProcess = new ProcessBuilder("java", "-cp", fileDir, fileName.split(".java")[0]).start();  //cmd 명령어 ex)java -cp C:\temp\ test
 			
 			BufferedReader resultOut = new BufferedReader(new InputStreamReader(oProcess.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(oProcess.getErrorStream()));
@@ -51,9 +57,9 @@ public class Runner {
 			resultList.add(""+"컴파일 오류");
 			return false;
 		}
-		if (model.getFileName().split(".java")[model.getFileName().split(".java").length -1].equals(".java")) //파일 이름이 .java 확장자가 아니라면
+		if (fileName.split(".java")[fileName.split(".java").length -1].equals(".java")) //파일 이름이 .java 확장자가 아니라면
 			return false;
-		File file = new File(model.getFilePath());
+		File file = new File(fileDir+fileName);
 		return true;
 	}
 }
