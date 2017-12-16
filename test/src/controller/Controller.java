@@ -120,8 +120,8 @@ public class Controller {
 			chooser = new JFileChooser();
 			FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("텍스트문서(*.txt)", "txt");
 			FileNameExtensionFilter javaFilter = new FileNameExtensionFilter("자바파일(*.java)", "java");
-			chooser.setFileFilter(javaFilter);
 			chooser.setFileFilter(txtFilter);
+			chooser.setFileFilter(javaFilter);
 		}
 
 		@Override
