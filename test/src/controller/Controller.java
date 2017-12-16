@@ -10,18 +10,12 @@
  * 수정자 : 주한솔
  * 수정일 : 17.11.26
  * 수정내용: 225라인 저장 로직 수정 if-if-else-->if- else if -else
- * 수정일:17.12.16
- * 수정자:주한솔
- * 수정내용:
- * 1.요구사항에 맞게 리스너 수정
- * 2.파일이 안열였을때 클릭시 경고 추가
  * @author 정은진
  * 
  */
 package controller;
 
 import java.awt.Component;
-import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -65,17 +59,21 @@ public class Controller {
 	}
 
 	private class saveAsJavaFileActionListener implements ActionListener {
+		private JFileChooser chooser;
+		public saveAsJavaFileActionListener() {
+			chooser = new JFileChooser();// 객체 생성
+		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 			if(selected != null) {
-				FileDialog saveDialog = new FileDialog(gui, "저장", FileDialog.SAVE);
-				saveDialog.setVisible(true);
-
-				if(saveDialog.getFile() == null)
+				int ret = chooser.showSaveDialog(null);
+				if (ret != JFileChooser.APPROVE_OPTION) {
+					JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
 					return;
-				String filePath = saveDialog.getDirectory() + saveDialog.getFile();
+				}
+				String filePath = chooser.getSelectedFile().getPath();
 
 				if (selected != null) {
 					try {
@@ -102,11 +100,9 @@ public class Controller {
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 
 			if (selected != null) {
-				gui.getTabPanelMap().remove(gui.getPanelToModel().get(tabPanel));  //해쉬맵에서 제거
-				gui.getPanelToModel().remove(tabPanel);  //해쉬맵에서 제거
+				gui.getTabPanelMap().remove(gui.getTabPanelMap().remove(tabPanel));  //해쉬맵에서 제거
 				gui.getTabbedPane().remove(tabPanel);  //tabpane에서 제거
-			}else
-				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 
@@ -120,8 +116,8 @@ public class Controller {
 			chooser = new JFileChooser();
 			FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("텍스트문서(*.txt)", "txt");
 			FileNameExtensionFilter javaFilter = new FileNameExtensionFilter("자바파일(*.java)", "java");
-			chooser.setFileFilter(txtFilter);
 			chooser.setFileFilter(javaFilter);
+			chooser.setFileFilter(txtFilter);
 		}
 
 		@Override
@@ -151,17 +147,15 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			Model model = gui.getPanelToModel().get(tabPanel);
+			Model model = gui.getTabPanelMap().getKey(tabPanel);
 			if (selected != null) {
-				if (model.getFilePath() != null) //?
+				if (model.getFilePath() != null)
 					try {
 						saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
-						tabPanel.getResultTextArea().setText(model.getFilePath() + "에 저장 성공.");
 					} catch (IOException ie) {
 						tabPanel.getResultTextArea().setText(ie.getMessage());
 					}
-			}else
-				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 
@@ -170,20 +164,16 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			Model model = gui.getPanelToModel().get(tabPanel);
-			if (selected != null) {
-				tabPanel.getResultTextArea().setText("");
-				ArrayList<String> list;
-				if (model.getFileDir() == null || model.getFileName() == null) {
-					tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-					return;
-				}
-				runner.setFile(model.getFileDir(), model.getFileName());
-				list = runner.run(model.getIsCompiled());
-				for (String line : list)
-					tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
-			}else
-				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			Model model = gui.getTabPanelMap().getKey(tabPanel);
+			tabPanel.getResultTextArea().setText("");
+			ArrayList<String> list;
+			if (model.getFileDir() == null || model.getFileName() == null) {
+				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+				return;
+			}
+			list = runner.run(model.getIsCompiled());
+			for (String line : list)
+				tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
 		}
 	}
 
@@ -193,27 +183,24 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
-			Model model = gui.getPanelToModel().get(tabPanel);
-			if (selected != null) {
-				tabPanel.getResultTextArea().setText("");
-				ArrayList<String> lines;
-				if (model.getFileDir() == null || model.getFileName() == null) {
-					tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-				} else {
-					compiler.setFile(model.getFileDir(), model.getFileName());
-					lines = compiler.compiler();
-					for (String line : lines)
-						tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
+			Model model = gui.getTabPanelMap().getKey(tabPanel);
+			tabPanel.getResultTextArea().setText("");
+			ArrayList<String> lines;
+			if (model.getFileDir() == null || model.getFileName() == null) {
+				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+			} else {
+				compiler.setFile(model.getFileDir(), model.getFileName());
+				lines = compiler.compiler();
+				for (String line : lines) {
+					tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
 				}
-			}else
-				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 
 	public ArrayList<String> readFile(String filePath) { // 해당 파일을 불러와서 list로 반환
 		String line = null;
 		ArrayList<String> lines = new ArrayList<String>();
-		File file = new File(filePath);
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePath));
 			while ((line = reader.readLine()) != null) {

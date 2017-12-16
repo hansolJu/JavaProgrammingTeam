@@ -1,6 +1,5 @@
 package view;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.JFrame;
@@ -9,15 +8,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-import model.Model;
+import model.*;
 
 public class GUI extends JFrame{
 	private JMenuBar menuBar;
 	private JMenu fileMenu, runMenu; 
 	private JMenuItem openMenuItem, closeMenuItem, saveMenuItem, saveAsMenuItem, quitMenuItem,compileMenuItem, runMenuItem;
 	private JTabbedPane tabbedPane;
-	private HashMap<Model, TabPanel> tabPanelMap;
-	private HashMap<TabPanel, Model> panelToModel;
+	private BidMap<Model, TabPanel> tabPanelMap;  //양방향(bidirectional)의 tapanelMap
 	public GUI(String title) {
 		setTitle(title);
 		setBounds(100, 100, 493, 800);
@@ -34,8 +32,7 @@ public class GUI extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		tabPanelMap = new HashMap<Model,TabPanel>();
-		panelToModel = new HashMap<TabPanel, Model>();
+		tabPanelMap = new BidMap<Model,TabPanel>();
 		tabbedPane = new JTabbedPane();
 
 		add(tabbedPane);
@@ -44,7 +41,6 @@ public class GUI extends JFrame{
 	public void addTap(Model model, TabPanel tabPanel) {
 		if(checkModel(model)) {  //새로운 모델이라면
 			tabPanelMap.put(model, tabPanel);
-			panelToModel.put(tabPanel, model);
 			tabbedPane.add(model.getFileName(), tabPanel); //파일이름과 panel
 		}
 	}
@@ -62,7 +58,7 @@ public class GUI extends JFrame{
 		getContentPane().add(menuBar);
 
 		fileMenu = new JMenu("File");
-		menuBar.add(fileMenu);//
+		menuBar.add(fileMenu);
 
 		openMenuItem = new JMenuItem("Open");
 		fileMenu.add(openMenuItem);
@@ -163,20 +159,12 @@ public class GUI extends JFrame{
 		this.runMenuItem = runMenuItem;
 	}
 
-	public HashMap<Model, TabPanel> getTabPanelMap() {
+	public BidMap<Model, TabPanel> getTabPanelMap() {
 		return tabPanelMap;
 	}
 
-	public void setTabPanelMap(HashMap<Model, TabPanel> tabPanelMap) {
+	public void setTabPanelMap(BidMap<Model, TabPanel> tabPanelMap) {
 		this.tabPanelMap = tabPanelMap;
-	}
-
-	public HashMap<TabPanel, Model> getPanelToModel() {
-		return panelToModel;
-	}
-
-	public void setPanelToModel(HashMap<TabPanel, Model> panelToModel) {
-		this.panelToModel = panelToModel;
 	}
 
 	public JTabbedPane getTabbedPane() {
