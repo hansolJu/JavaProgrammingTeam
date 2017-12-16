@@ -1,6 +1,10 @@
 /**
  * .class파일을 실행시켜주는 클래스
  * 수정일 : 17.11.16
+ * 수정일:17.12.16
+ * 수정자:주한솔
+ * 수정내용:1.파일 얻어오는법
+ * 			2.체크컴파일 수정
  * @author 정은진
  * 
  */
@@ -28,8 +32,6 @@ public class Runner {
 	 */
 	public ArrayList<String> run(boolean isCompiled) {
 		resultList = new ArrayList<String>();
-		if(!checkCompiled(isCompiled))  //잘 컴파일 됐는지 검사
-			return resultList;
 		try {
 			String outLine, errLine;
 			System.out.println(fileDir+fileName);

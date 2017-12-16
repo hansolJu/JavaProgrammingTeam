@@ -10,6 +10,11 @@
  * 수정자 : 주한솔
  * 수정일 : 17.11.26
  * 수정내용: 225라인 저장 로직 수정 if-if-else-->if- else if -else
+ * 수정일:17.12.16
+ * 수정자:주한솔
+ * 수정내용:
+ * 1.요구사항에 맞게 리스너 수정
+ * 2.파일이 안열였을때 클릭시 경고 추가
  * @author 정은진
  * 
  */
@@ -100,7 +105,8 @@ public class Controller {
 				gui.getTabPanelMap().remove(gui.getPanelToModel().get(tabPanel));  //해쉬맵에서 제거
 				gui.getPanelToModel().remove(tabPanel);  //해쉬맵에서 제거
 				gui.getTabbedPane().remove(tabPanel);  //tabpane에서 제거
-			}
+			}else
+				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -154,7 +160,8 @@ public class Controller {
 					} catch (IOException ie) {
 						tabPanel.getResultTextArea().setText(ie.getMessage());
 					}
-			}
+			}else
+				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -164,16 +171,19 @@ public class Controller {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 			Model model = gui.getPanelToModel().get(tabPanel);
-			tabPanel.getResultTextArea().setText("");
-			ArrayList<String> list;
-			if (model.getFileDir() == null || model.getFileName() == null) {
-				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-				return;
-			}
-			runner.setFile(model.getFileDir(), model.getFileName());
-			list = runner.run(model.getIsCompiled());
-			for (String line : list)
-				tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
+			if (selected != null) {
+				tabPanel.getResultTextArea().setText("");
+				ArrayList<String> list;
+				if (model.getFileDir() == null || model.getFileName() == null) {
+					tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+					return;
+				}
+				runner.setFile(model.getFileDir(), model.getFileName());
+				list = runner.run(model.getIsCompiled());
+				for (String line : list)
+					tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line + "\n");
+			}else
+				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -184,17 +194,19 @@ public class Controller {
 			Component selected = gui.getTabbedPane().getSelectedComponent();
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 			Model model = gui.getPanelToModel().get(tabPanel);
-			tabPanel.getResultTextArea().setText("");
-			ArrayList<String> lines;
-			if (model.getFileDir() == null || model.getFileName() == null) {
-				tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
-			} else {
-				compiler.setFile(model.getFileDir(), model.getFileName());
-				lines = compiler.compiler();
-				for (String line : lines) {
-					tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
+			if (selected != null) {
+				tabPanel.getResultTextArea().setText("");
+				ArrayList<String> lines;
+				if (model.getFileDir() == null || model.getFileName() == null) {
+					tabPanel.getResultTextArea().setText("열린 파일이 없습니다.\n파일을 열어주세요.");
+				} else {
+					compiler.setFile(model.getFileDir(), model.getFileName());
+					lines = compiler.compiler();
+					for (String line : lines)
+						tabPanel.getResultTextArea().setText(tabPanel.getResultTextArea().getText() + line);
 				}
-			}
+			}else
+				JOptionPane.showMessageDialog(null, "파일을 먼저 열어주세요.", "경고", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
