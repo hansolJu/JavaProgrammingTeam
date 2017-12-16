@@ -37,8 +37,7 @@ public class GUI extends JFrame{
 		tabPanelMap = new HashMap<Model,TabPanel>();
 		panelToModel = new HashMap<TabPanel, Model>();
 		tabbedPane = new JTabbedPane();
-		TabPanel tabPanel = new TabPanel();
-		tabbedPane.add("test", tabPanel); //파일이름과 panel
+
 		add(tabbedPane);
 		setVisible(true);
 	}

@@ -16,6 +16,7 @@
 package controller;
 
 import java.awt.Component;
+import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -59,34 +60,70 @@ public class Controller {
 	}
 
 	private class saveAsJavaFileActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Component selected = gui.getTabbedPane().getSelectedComponent();
+			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
+			//Model model = gui.getPanelToModel().get(tabPanel);
+			if(selected != null) {
+				FileDialog saveDialog = new FileDialog(gui, "저장", FileDialog.SAVE);
+				saveDialog.setVisible(true);
 
+				if(saveDialog.getFile() == null)
+					return;
+				String filePath = saveDialog.getDirectory() + saveDialog.getFile();
+
+				if (selected != null) {
+					try {
+						saveFile(filePath, tabPanel.getEditingTextArea().getText());
+						tabPanel.getResultTextArea().setText(filePath + "에 저장 성공.");
+					} catch (IOException ie) {
+						tabPanel.getResultTextArea().setText(ie.getMessage());
+					}
+				}
+			}
+		}
 	}
-
 	private class quitActionListener implements ActionListener {
-
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
 	}
 
 	private class CloseActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Component selected = gui.getTabbedPane().getSelectedComponent();
+			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 
+			if (selected != null) {
+				gui.getTabPanelMap().remove(gui.getPanelToModel().get(tabPanel));  //해쉬맵에서 제거
+				gui.getPanelToModel().remove(tabPanel);  //해쉬맵에서 제거
+
+				gui.getTabbedPane().remove(tabPanel);  //tabpane에서 제거
+			}
+		}
 	}
 
 	private class openJavaFileActionListener implements ActionListener { // 자바 파일 열기 리스너
 		private JFileChooser chooser;
-		private Model model = new Model(); // 모델 하나 생성
+		private Model model;// 모델 하나 생성
 		private ArrayList<String> lines; // 해당 모델에서 읽어올 String lines
-		private TabPanel tabPanel = new TabPanel(); // 추가할 tabPane
+		private TabPanel tabPanel; // 추가할 tabPane
 
 		openJavaFileActionListener() {
 			chooser = new JFileChooser();
+			FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("텍스트문서(*.txt)", "txt");
+			FileNameExtensionFilter javaFilter = new FileNameExtensionFilter("자바파일(*.java)", "java");
+			chooser.setFileFilter(javaFilter);
+			chooser.setFileFilter(txtFilter);
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("텍스트문서(*.txt)", "txt");
-			FileNameExtensionFilter javaFilter = new FileNameExtensionFilter("자파파일(*.java)", "java");
-			chooser.setFileFilter(javaFilter);
-			chooser.setFileFilter(txtFilter);
-
+			model = new Model();
+			tabPanel = new TabPanel();
 			int ret = chooser.showOpenDialog(null);
 			if (ret != JFileChooser.APPROVE_OPTION) {
 				JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
@@ -112,23 +149,13 @@ public class Controller {
 			TabPanel tabPanel = (TabPanel) gui.getTabbedPane().getSelectedComponent();
 			Model model = gui.getPanelToModel().get(tabPanel);
 			if (selected != null) {
-				if (model.getFilePath() == null)
-
+				if (model.getFilePath() != null) //?
 					try {
-						File file = new File(model.getFilePath());
-						String[] lines = tabPanel.getEditingTextArea().getText().split("\n");
-						ArrayList<String> list = new ArrayList<>(Arrays.asList(lines)); // 배열 -> 리스트
-
-						BufferedWriter fw = new BufferedWriter(new FileWriter(file, false));
-						for (String line : list)
-							fw.write(line + "\n");
-						fw.close();
-						tabPanel.getResultTextArea().setText(model.getFilePath() + "에 저장 성공.");
+						saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
 					} catch (IOException ie) {
 						tabPanel.getResultTextArea().setText(ie.getMessage());
 					}
 			}
-
 		}
 	}
 
@@ -185,5 +212,15 @@ public class Controller {
 			e.printStackTrace();
 		}
 		return lines;
+	}
+	public void saveFile(String saveFilePath, String texts) throws IOException {  //saveFilePath에 list를 파일 출력
+		String [] lines = texts.split("\n");
+		ArrayList<String> list= new ArrayList<>(Arrays.asList(lines));  //배열 -> 리스트
+
+		File file = new File(saveFilePath);
+		BufferedWriter fw = new BufferedWriter(new FileWriter(file, false));
+		for(String line : list) 
+			fw.write(line + "\n");
+		fw.close();
 	}
 }
