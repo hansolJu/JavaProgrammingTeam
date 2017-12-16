@@ -17,6 +17,7 @@ public class GUI extends JFrame{
 	private JMenuItem openMenuItem, closeMenuItem, saveMenuItem, saveAsMenuItem, quitMenuItem,compileMenuItem, runMenuItem;
 	private JTabbedPane tabbedPane;
 	private HashMap<Model, TabPanel> tabPanelMap;
+	private HashMap<TabPanel, Model> panelToModel;
 	public GUI(String title) {
 		setTitle(title);
 		setBounds(100, 100, 493, 800);
@@ -34,6 +35,7 @@ public class GUI extends JFrame{
 	 */
 	private void initialize() {
 		tabPanelMap = new HashMap<Model,TabPanel>();
+		panelToModel = new HashMap<TabPanel, Model>();
 		tabbedPane = new JTabbedPane();
 		TabPanel tabPanel = new TabPanel();
 		tabbedPane.add("test", tabPanel); //파일이름과 panel
@@ -43,6 +45,7 @@ public class GUI extends JFrame{
 	public void addTap(Model model, TabPanel tabPanel) {
 		if(checkModel(model)) {  //새로운 모델이라면
 			tabPanelMap.put(model, tabPanel);
+			panelToModel.put(tabPanel, model);
 			tabbedPane.add(model.getFileName(), tabPanel); //파일이름과 panel
 		}
 	}
@@ -167,6 +170,14 @@ public class GUI extends JFrame{
 
 	public void setTabPanelMap(HashMap<Model, TabPanel> tabPanelMap) {
 		this.tabPanelMap = tabPanelMap;
+	}
+
+	public HashMap<TabPanel, Model> getPanelToModel() {
+		return panelToModel;
+	}
+
+	public void setPanelToModel(HashMap<TabPanel, Model> panelToModel) {
+		this.panelToModel = panelToModel;
 	}
 
 	public JTabbedPane getTabbedPane() {
