@@ -6,6 +6,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 
 public class TabPanel extends JPanel{
+	private static final long serialVersionUID = 2354320108366842278L;
 	JTextArea editingTextArea;
 	JTextArea resultTextArea;
 	model.Model model;

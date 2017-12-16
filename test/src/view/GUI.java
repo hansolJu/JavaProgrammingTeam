@@ -1,15 +1,12 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import model.Model;
@@ -17,19 +14,19 @@ import model.Model;
 public class GUI extends JFrame{
 	private JMenuBar menuBar;
 	private JMenu fileMenu, runMenu; 
-	private JMenuItem openMenuItem, closeMenuItem, saveMenuItem, saveAsMenuItem, quitMenuItem;
-	private JMenuItem compileMenuItem, runMenuItem;
+	private JMenuItem openMenuItem, closeMenuItem, saveMenuItem, saveAsMenuItem, quitMenuItem,compileMenuItem, runMenuItem;
 	private JTabbedPane tabbedPane;
 	private HashMap<Model, TabPanel> tabPanelMap;
 	public GUI(String title) {
 		setTitle(title);
 		setBounds(100, 100, 493, 800);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);// 프레임 중앙에 배치.
-		setResizable(false); //리사이즈를 막는 메서드.
 
 		createMenu();
 		initialize();
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);// 프레임 중앙에 배치.
+		setResizable(false); //리사이즈를 막는 메서드.
 	}
 
 	/**
@@ -38,18 +35,14 @@ public class GUI extends JFrame{
 	private void initialize() {
 		tabPanelMap = new HashMap<Model,TabPanel>();
 		tabbedPane = new JTabbedPane();
-		
 		TabPanel tabPanel = new TabPanel();
 		tabbedPane.add("test", tabPanel); //파일이름과 panel
-
 		add(tabbedPane);
-		
 		setVisible(true);
 	}
 	public void addTap(Model model, TabPanel tabPanel) {
 		if(checkModel(model)) {  //새로운 모델이라면
 			tabPanelMap.put(model, tabPanel);
-			
 			tabbedPane.add(model.getFileName(), tabPanel); //파일이름과 panel
 		}
 	}
