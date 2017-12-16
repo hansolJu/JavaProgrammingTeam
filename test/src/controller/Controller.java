@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
@@ -78,14 +79,16 @@ public class Controller {
 					return;
 				}
 				String filePath = chooser.getSelectedFile().getPath();
-
-				if (selected != null) {
-					try {
-						saveFile(filePath, tabPanel.getEditingTextArea().getText());
-						tabPanel.getResultTextArea().setText(filePath + "에 저장 성공.");
-					} catch (IOException ie) {
-						tabPanel.getResultTextArea().setText(ie.getMessage());
-					}
+				File file = new File(filePath);
+				if(file.exists()) {  //이미 있는 파일일 경우
+					JOptionPane.showMessageDialog(null, "이미 존재하는 파일입니다.", "경고", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				try {
+					saveFile(filePath, tabPanel.getEditingTextArea().getText());
+					tabPanel.getResultTextArea().setText(filePath + "에 저장 성공.");
+				} catch (IOException ie) {
+					tabPanel.getResultTextArea().setText(ie.getMessage());
 				}
 			}
 		}
@@ -161,6 +164,10 @@ public class Controller {
 				if (model.getFilePath() != null)
 					model.setIsCompiled(false);  //다시 컴파일하도록
 				try {
+					int result = JOptionPane.showConfirmDialog(null, "저장하시겠습니까?",
+							"저장", JOptionPane.YES_NO_OPTION);
+					if(result != JOptionPane.YES_OPTION) 
+						return;
 					saveFile(model.getFilePath(), tabPanel.getEditingTextArea().getText());
 				} catch (IOException ie) {
 					tabPanel.getResultTextArea().setText(ie.getMessage());
