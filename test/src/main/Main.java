@@ -6,8 +6,6 @@ import view.GUI;
 
 public class Main {
 	public static void main(String[] args) {
-		//Model m = Model.getInstance();
-		//View v = new View("IDE");
 		GUI g = new GUI("IDE");
 		Controller c = new Controller(g);
 		c.initController();
